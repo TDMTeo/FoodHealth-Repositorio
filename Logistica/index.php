@@ -9,7 +9,7 @@
 <html lang="en">
 
 <head>
-  <title>Jefe de logística</title>
+  <title>Jefe de logística debidmente modificado para el test de git hub</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
