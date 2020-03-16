@@ -159,7 +159,7 @@ if(!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
                          <div class="controls">
                            <select name="Pedido" id="Pedido" class="form-control">
                              <?php
-                             $queryy = $conectar -> query ("SELECT * FROM pedido");
+                             $queryy = $conectar -> query ("select * from pedido where Pedido.idEstado in (1,4)");
                              while ($valoress = mysqli_fetch_array($queryy)) {
                               echo '<option value="'.$valoress[idPedido].'">'.$valoress[CodigoQR].'</option>';
                             }
