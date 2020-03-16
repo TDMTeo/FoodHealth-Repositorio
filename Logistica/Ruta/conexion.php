@@ -1,5 +1,5 @@
 <?php
-// se hizo este cambio para verificar el probable problema que vamos a tener con los puertos de victor
+
 $contraseña = "";
 $usuario = "root";
 $nombre_base_de_datos = "foodhealth";
