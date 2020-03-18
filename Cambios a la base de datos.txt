@@ -1,3 +1,4 @@
+
 Cambio en la tabla jefe_logistica
 
 ALTER TABLE `jefe_logistica` ADD `foto` varchar(255) NULL AFTER `aboutme`;
