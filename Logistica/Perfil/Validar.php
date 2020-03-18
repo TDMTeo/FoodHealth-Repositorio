@@ -11,6 +11,7 @@ if (isset($_POST['Modificar'])) {
 	$nombres = $_POST['nombres'];
 	$apellidos = $_POST['apellidos'];
 	$telefono = $_POST['telefono'];
+	$documento = $_POST['n_Documento'];
 	$TDocumento = $_POST['TDocumento'];
 	$direccion = $_POST['direccion'];
 	$Municipio = $_POST['Municipio'];
@@ -19,14 +20,18 @@ if (isset($_POST['Modificar'])) {
 
     $nombrefoto = $_FILES['Foto']['name'];
 	$archivo = $_FILES['Foto']['tmp_name'];
-	$ruta = "photos";
+	$ruta = "photos"."/".$documento;
+
+	if (!file_exists($ruta)) {
+		mkdir($ruta);
+	}
 
 	$ruta = $ruta."/".$nombrefoto;
 
 	move_uploaded_file($archivo,$ruta);
 
 
-	$query = "UPDATE jefe_logistica set  nombres = '$nombres', apellidos = '$apellidos', telefono = '$telefono', idTipoDocumento = '$TDocumento', direccion = '$direccion', idMunicipio = '$Municipio', codigopostal = '$codigopostal',  aboutme = '$descripcion', foto = '$ruta' where idjefe_logistica = $idjefe_logistica";
+	$query = "UPDATE jefe_logistica set  nombres = '$nombres', apellidos = '$apellidos', telefono = '$telefono',n_Documento = '$documento',  idTipoDocumento = '$TDocumento', direccion = '$direccion', idMunicipio = '$Municipio', codigopostal = '$codigopostal',  aboutme = '$descripcion', foto = '$ruta' where idjefe_logistica = $idjefe_logistica";
 
 	$Actualizar = mysqli_query($conectar,$query);
 
