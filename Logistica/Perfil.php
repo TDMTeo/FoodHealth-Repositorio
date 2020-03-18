@@ -281,8 +281,18 @@
             <div class="col-md-4">
               <div class="card card-profile">
                 <div class="card-avatar">
-                  <a href="javascript:;">
-                    <img class="img" src="../assets/img/TEO.png" />
+                   <a href="javascript:;">
+                    <?php 
+
+                      include('php/Conexion.php');
+                      $idUsuario =  $_SESSION['idUsuario'] ;
+                      $consulta = mysqli_query($conectar,"SELECT * from jefe_logistica where idUsuario = '$idUsuario'");
+
+                      $jefe_logistica = mysqli_fetch_array($consulta);
+
+                      $fotoperfil = $jefe_logistica["foto"];
+                     ?>
+                    <img class="img" src="Perfil/<?php echo $fotoperfil?>" />
                   </a>
                 </div>
                 <div class="card-body">

@@ -24,8 +24,10 @@ $resultado = $sentencia->fetch(PDO::FETCH_OBJ);
 $base_de_datos->beginTransaction();
 //$sentencia = $base_de_datos->prepare("INSERT INTO pedidos(idIngrediente, idAlimento, cantidad) VALUES (?, ?, ?);");
 $sentencia = $base_de_datos->prepare("UPDATE pedido SET idRuta = ? WHERE idPedido = ?;");
+$sentencia1 = $base_de_datos->prepare("UPDATE pedido SET idEstado = 2   WHERE idPedido = ?;");
 foreach ($_SESSION["carrito"] as $producto) {
-	$sentencia->execute([$resultado->idRuta, $producto->idPedido]);
+  $sentencia->execute([$resultado->idRuta, $producto->idPedido]);
+  $sentencia1->execute([$producto->idPedido]);
 	//$sentenciaExistencia->execute([$producto->cantidad, $producto->id]);
 }
 //if ($sentencia) {

@@ -17,13 +17,22 @@ if (isset($_POST['Modificar'])) {
 	$codigopostal = $_POST['codigopostal'];
 	$descripcion = $_POST['descripcion'];
 
+    $nombrefoto = $_FILES['Foto']['name'];
+	$archivo = $_FILES['Foto']['tmp_name'];
+	$ruta = "photos";
 
-	$query = "UPDATE jefe_logistica set  nombres = '$nombres', apellidos = '$apellidos', telefono = '$telefono', idTipoDocumento = '$TDocumento', direccion = '$direccion', idMunicipio = '$Municipio', codigopostal = '$codigopostal',  aboutme = '$descripcion' where idjefe_logistica = $idjefe_logistica";
+	$ruta = $ruta."/".$nombrefoto;
+
+	move_uploaded_file($archivo,$ruta);
+
+
+	$query = "UPDATE jefe_logistica set  nombres = '$nombres', apellidos = '$apellidos', telefono = '$telefono', idTipoDocumento = '$TDocumento', direccion = '$direccion', idMunicipio = '$Municipio', codigopostal = '$codigopostal',  aboutme = '$descripcion', foto = '$ruta' where idjefe_logistica = $idjefe_logistica";
 
 	$Actualizar = mysqli_query($conectar,$query);
 
 	if ($Actualizar) {
-		header("Location: ../Perfil.php?status=1");
+	header("Location: ../Perfil.php?status=1");
+		echo $ruta;
 		}
 	else
 		{
