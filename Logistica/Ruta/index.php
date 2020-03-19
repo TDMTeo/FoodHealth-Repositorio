@@ -191,6 +191,7 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
                                 <th>Código</th>
                                 <th>Código QR</th>
                                 <th>Estado</th>
+                                <th>Tiempo aproximado</th>
                               </tr>
                             </thead>
                             <tbody>

@@ -201,7 +201,7 @@ if(!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
                     }
                     ?>
                   </select><br>
-                  <label for="nombreAlimento">Nombre del jefe de Logistica:</label>
+                  <label for="nombreAlimento">Nombre del jefe de logística:</label>
                   <!-- <input autocomplete="off" autofocus class="form-control" name="JefeLogistica" required type="text" id="JefeLogistica" placeholder="Escribe el nombre" type="text" minlength="3"><br> -->
                   <select name="JefeLogistica" id="JefeLogistica" class="form-control">
                     <?php
@@ -211,6 +211,10 @@ if(!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
                     }
                     ?>
                   </select><br>
+
+                  <label class="bmd-label-floating"> Tiempo aproximado (En minutos)</label>
+                  <input type="text" class="form-control" name="Tiempo_aproximado" minlength="1" maxlength="3"  autocomplete="off" 
+                  required onKeyPress="return SoloNumeros(event);"> 
 
                   <button type="submit" class="btn btn-success"><i class="material-icons">save</i> Terminar</button>
                   <a href="./cancelar.php" class="btn btn-danger pull-right"><i class="material-icons">clear</i> Cancelar</a>
@@ -280,6 +284,36 @@ if(!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
 <script src="../assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="../assets/demo/demo.js"></script>
+
+
+<script>
+        //Se utiliza para que el campo de texto solo acepte numeros
+      function SoloNumeros(evt){
+      if(window.event){//asignamos el valor de la tecla a keynum
+      keynum = evt.keyCode; //IE
+      }
+      else{
+       keynum = evt.which; //FF
+      } 
+      //comprobamos si se encuentra en el rango numérico y que teclas no recibirá.
+      if((keynum > 47 && keynum < 58) || keynum == 8 || keynum == 13 || keynum == 6 ){
+       return true;
+        }
+        else{
+          Swal.fire({
+                                icon: 'error',
+                                title: '<strong><h2> Error </h2></strong>',
+                                html: '<h5> Solo caracteres numéricos sin letras</h5>',
+                                type: 'error',
+                                padding: '3em',
+                                timer: 1000,
+                                showConfirmButton: false
+                                
+                              })
+       return false;
+        }
+  }
+        </script>
 
 
 </body>
