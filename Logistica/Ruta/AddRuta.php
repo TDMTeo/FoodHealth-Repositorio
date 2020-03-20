@@ -53,7 +53,7 @@ if(!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
             </a>
           </li>
           <li class="nav-item active ">
-            <a class="nav-link" href="Ruta/">
+            <a class="nav-link" href="index.php">
               <i class="material-icons">directions_bike</i>
               <p>Ruta</p>
             </a>
@@ -62,6 +62,12 @@ if(!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
             <a class="nav-link" href="../Pedidos.php">
               <i class="material-icons">fastfood</i>
               <p>Pedidos</p>
+            </a>
+          </li>
+          <li class="nav-item  ">
+            <a class="nav-link" href="../CodigoQR/">
+              <i class="material-icons">blur_linear</i>
+              <p>Generar QR</p>
             </a>
           </li>
           <!-- your sidebar here -->
@@ -159,9 +165,9 @@ if(!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
                          <div class="controls">
                            <select name="Pedido" id="Pedido" class="form-control">
                              <?php
-                             $queryy = $conectar -> query ("select * from pedido where Pedido.idEstado in (1,4)");
+                             $queryy = $conectar -> query ("select * from pedido where Pedido.idEstado in (1,4) and Pedido.CodigoQR is not null");
                              while ($valoress = mysqli_fetch_array($queryy)) {
-                              echo '<option value="'.$valoress[idPedido].'">'.$valoress[CodigoQR].'</option>';
+                              echo '<option value="'.$valoress[idPedido].'">'.$valoress[DireccionPredeterminada].'</option>';
                             }
                             ?>
                           </select>
@@ -183,7 +189,7 @@ if(!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
                        ?>
                        <tr>
                          <td><?php echo $Pedidos->idPedido ?></td>
-                         <td><?php echo $Pedidos->CodigoQR ?></td>
+                         <td><IMG SRC="../CodigoQR/<?php echo $Pedidos->CodigoQR ?>" width="100px" height="100px>"></td>
                          <!-- <td><?php echo $Ruta->idEstado ?></td> -->
                          <td><a class="btn btn-danger" href="<?php echo "quitar.php?indice=" . $indice?>"><i class="fa fa-trash"></i></a></td>
                        </tr>
@@ -213,7 +219,7 @@ if(!isset($_SESSION["carrito"])) $_SESSION["carrito"] = [];
                   </select><br>
 
                   <label class="bmd-label-floating"> Tiempo aproximado (En minutos)</label>
-                  <input type="text" class="form-control" name="Tiempo_aproximado" minlength="1" maxlength="3"  autocomplete="off" 
+                  <input type="text" class="form-control" name="Tiempo_Aproximado" id="Tiempo_Aproximado" minlength="1" maxlength="3"  autocomplete="off" 
                   required onKeyPress="return SoloNumeros(event);"> 
 
                   <button type="submit" class="btn btn-success"><i class="material-icons">save</i> Terminar</button>

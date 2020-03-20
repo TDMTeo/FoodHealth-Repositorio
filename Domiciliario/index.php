@@ -91,7 +91,7 @@
                   <a class="dropdown-item" href="#">Perfil</a>
                   <a class="dropdown-item" href="#">Configurar</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="../login/cerrarsesion.php">Cerrar Sesion</a>
+                     <a class="dropdown-item" href="cerrarsesion.php">Cerrar Sesion</a>
                 </div>
               </li>
             </ul>

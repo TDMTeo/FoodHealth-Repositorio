@@ -7,7 +7,7 @@ if(!isset($_SESSION['Perfil']))
 ?>
 <?php 
 include_once "conexion.php";
-$sentencia = $base_de_datos->query("SELECT Ruta.idRuta, ruta.idDomiciliario, GROUP_CONCAT(Pedido.idPedido,'..', pedido.CodigoQR, '..', estado.Estado SEPARATOR '__') AS pedido 
+$sentencia = $base_de_datos->query("SELECT Ruta.idRuta, ruta.idDomiciliario, ruta.Tiempo_Aproximado, GROUP_CONCAT(Pedido.idPedido,'..', pedido.CodigoQR, '..', estado.Estado SEPARATOR '__') AS pedido 
 
   FROM ruta INNER JOIN domiciliario ON domiciliario.idDomiciliario = ruta.idDomiciliario INNER JOIN pedido ON pedido.idRuta = ruta.idRuta INNER JOIN estado ON estado.idEstado = pedido.idEstado GROUP BY ruta.idRuta ORDER BY ruta.idRuta;");
 
@@ -69,6 +69,12 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
             <a class="nav-link" href="../Pedidos.php">
               <i class="material-icons">fastfood</i>
               <p>Pedidos</p>
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="../CodigoQR/">
+              <i class="material-icons">blur_linear</i>
+              <p>Generar QR</p>
             </a>
           </li>
           <!-- your sidebar here -->
@@ -177,6 +183,7 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
                     <thead  class=" text-primary">
                       <th>#</th>
                       <th>Domiciliario</th>
+                      <th>Tiempo_Aproximado</th>
                       <th>Pedidos</th>
                       <th>Deshabilitar</th>
                     </thead>
@@ -184,14 +191,14 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
                       <?php foreach($Ruta as $Ruta){ ?>
                         <th><?php echo $Ruta->idRuta ?></th>
                         <th><?php echo $Ruta->idDomiciliario ?></th>
+                        <th><?php echo $Ruta->Tiempo_Aproximado ?></th>
                         <td>
                           <table id="lookup" class="table">
                             <thead  class="text-primary">
                               <tr>
                                 <th>Código</th>
                                 <th>Código QR</th>
-                                <th>Estado</th>
-                                <th>Tiempo aproximado</th>
+                                <th>Estado</th> 
                               </tr>
                             </thead>
                             <tbody>
@@ -200,7 +207,7 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
                                 ?>
                                 <tr>
                                   <td><?php echo $Route[0] ?></td>
-                                  <td><?php echo $Route[1] ?></td>
+                                  <td><IMG SRC="../CodigoQR/<?php echo $Route[1] ?>" width="100px" height="100px>"></td>
                                   <td><?php echo $Route[2] ?></td>
                                 </tr>
                               <?php } ?>

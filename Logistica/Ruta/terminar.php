@@ -13,8 +13,8 @@ $JefeLogistica = $_POST["JefeLogistica"];
 $Domiciliario = $_POST["domiciliario"];
 include_once "conexion.php";
 
-$sentencia = $base_de_datos->prepare("INSERT INTO ruta(idJefeLogistica, idDomiciliario, Tiempo_Aproximado) VALUES (?, ?, Tiempo_Aproximado);");
-$sentencia->execute([$JefeLogistica, $Domiciliario], $Tiempo_aproximado);
+$sentencia = $base_de_datos->prepare("INSERT INTO ruta(idJefeLogistica, iddomiciliario, Tiempo_Aproximado) VALUES (?, ?, ?);");
+$sentencia->execute([$JefeLogistica, $Domiciliario, $Tiempo_aproximado]);
 
 $sentencia = $base_de_datos->prepare("SELECT idRuta FROM ruta ORDER BY idRuta DESC LIMIT 1;");
 $sentencia->execute();

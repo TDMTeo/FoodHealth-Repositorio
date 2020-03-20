@@ -68,6 +68,12 @@
                 <p>Pedidos</p>
               </a>
             </li>
+            <li class="nav-item ">
+            <a class="nav-link" href="../CodigoQR/">
+              <i class="material-icons">blur_linear</i>
+              <p>Generar QR</p>
+            </a>
+          </li>
             <!-- your sidebar here -->
           </ul>
         </div>

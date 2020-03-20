@@ -9,7 +9,7 @@
 <html lang="en">
 
 <head>
-  <title>Pedidos</title>
+  <title>Generar Codigo QR</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -38,27 +38,33 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item ">
-            <a class="nav-link" href="index.php">
+            <a class="nav-link" href="../">
               <i class="material-icons">dashboard</i>
               <p>Inicio</p>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="Domiciliarios.php">
+            <a class="nav-link" href="../Domiciliarios.php">
               <i class="material-icons">directions_run</i>
               <p>Domiciliarios</p>
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="Ruta/">
+            <a class="nav-link" href="../Ruta/">
               <i class="material-icons">directions_bike</i>
               <p>Ruta</p>
             </a>
           </li>
-           <li class="nav-item active">
-            <a class="nav-link" href="Pedidos.php">
+           <li class="nav-item">
+            <a class="nav-link" href="../Pedidos.php">
               <i class="material-icons">fastfood</i>
               <p>Pedidos</p>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="index.php">
+              <i class="material-icons">blur_linear</i>
+              <p>Generar QR</p>
             </a>
           </li>
           <!-- your sidebar here -->
@@ -100,10 +106,10 @@
                   </p>
                 </a>
                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                  <a class="dropdown-item" href="Perfil.php">Perfil</a>
-                  <a class="dropdown-item" href="Perfil/Editar.php">Configurar</a>
+                  <a class="dropdown-item" href="../Perfil.php">Perfil</a>
+                  <a class="dropdown-item" href="../Perfil/Editar.php">Configurar</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="cerrarsesion.php">Cerrar Sesion</a>
+                  <a class="dropdown-item" href="../cerrarsesion.php">Cerrar Sesion</a>
                 </div>
               </li>
             </ul>
@@ -172,29 +178,36 @@
                           <th>QR</th>
                           <th>Direccion 1</th>
                           <th>Direccion 2</th>
-                          <th>Tiempo Aproximado</th>
-                          <th>Estado</th>
-                          <th>Editar </th>
+                          <th>Documento</th>
+                          <th>Generar</th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
-                        $query = "select pedido.idPedido, nombre, FechaEntrega, CodigoQR, pedido.DireccionPredeterminada, cliente.Direccion, Tiempo_Aproximado, n_Documento from cliente, pedido, estado, ruta where Cliente.idCliente = Pedido.idCliente and Pedido.idEstado = Estado.idEstado and Pedido.idRuta = Ruta.idRuta";
+                        $query = "select pedido.idPedido, nombre, fechaEntrega, CodigoQR, pedido.DireccionPredeterminada, cliente.direccion, n_Documento from cliente, pedido, estado where cliente.idCliente = pedido.idCliente and pedido.idEstado = Estado.idEstado";
                         $tabla = mysqli_query($conectar, $query);
 
                         while ($fila = mysqli_fetch_array($tabla)) {?>
                           <tr>
                             <td><?php echo $fila['idPedido']?></td>
                             <td><?php echo $fila['nombre']?></td>
-                            <td><?php echo $fila['FechaEntrega']?></td>
-                            <td><IMG SRC="<?php echo $fila['CodigoQR']?>" width="100px" height="100px"></td>
+                            <td><?php echo $fila['fechaEntrega']?></td>
+                            <td>
+                              <?php 
+                            if ($fila['CodigoQR']== "") {
+                              echo $fila['CodigoQR'];
+                            }else{
+                              echo '<IMG SRC="'.$fila['CodigoQR'].'" width="100px" height="100px>"';
+                            }
+                           ?>
+                             
+                           </td>
                             <td><?php echo $fila['DireccionPredeterminada']?></td>
-                            <td><?php echo $fila['Direccion']?></td>
-                            <td><?php echo $fila['Tiempo_Aproximado']?></td>
-                            <td><?php echo $fila['n_Documento']?></td>
+                            <td><?php echo $fila['direccion']?></td>
+                           <td><?php echo $fila['n_Documento']?></td>
                                 <td>
-                                  <a rel="tooltip"  title class="btn btn-success btn-link btn-sm editbtn" data-original-title="Editar" aria-describedby="tooltip578613">
-                                     <i class="material-icons">edit</i>
+                                  <a rel="tooltip"  title class="btn btn-success btn-link btn-sm editbtn" data-original-title="Generar" aria-describedby="tooltip578613">
+                                     <i class="material-icons">drag_indicator</i>
                                   </a>
                                 </td>
                           </tr>
@@ -229,7 +242,7 @@
             <div class="modal-dialog modal-dialog-scrollable" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalScrollableTitle">Modificar al domiciliario </h5>
+                  <h5 class="modal-title" id="exampleModalScrollableTitle">Generar Codigo QR </h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -240,10 +253,12 @@
                       <input type="hidden" name="update_id" id="update_id">
                       <input type="text" class="form-control" name="Pedido_id" id="Pedido_id" style="visibility:hidden">
                       <input type="hidden" name="n_Documento" id="n_Documento">
+
                 </div>
                 <div class="modal-footer">
                   <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>-->
-                  <button type="submit" class="btn btn-primary" name="Modificar" value="Modificar">Modificar</button>
+                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                  <button type="submit" class="btn btn-primary" name="Modificar" value="Modificar">Generar</button>
                 </div>
                 </form>
               </div>
@@ -318,7 +333,7 @@
 
               $('#update_id').val(data[0]);
               $('#Pedido_id').val(data[0]);
-              $('#n_Documento').val(data[7]);
+              $('#n_Documento').val(data[6]);
           });
         });
       </script>

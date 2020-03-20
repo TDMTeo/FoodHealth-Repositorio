@@ -62,6 +62,13 @@
               <p>Pedidos</p>
             </a>
           </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="CodigoQR/">
+              <i class="material-icons">blur_linear</i>
+              <p>Generar QR</p>
+            </a>
+          </li>
+
           <!-- your sidebar here -->
         </ul>
       </div>
@@ -146,7 +153,7 @@
                             <td><?php echo $fila['nombres']?></td>
                             <td><?php echo $fila['Tiempo_Aproximado']?></td>
                             <td><?php echo $fila['Tiempo_Estimado']?></td>
-                            <td><?php echo $fila['CodigoQR']?></td>
+                            <td><IMG SRC="CodigoQR/<?php echo $fila['CodigoQR']?>" width="100px" height="100px>"></td>
                             <td><?php echo $fila['DireccionPredeterminada']?></td>
                             <td><?php echo $fila['Estado']?></td>
                           </tr>

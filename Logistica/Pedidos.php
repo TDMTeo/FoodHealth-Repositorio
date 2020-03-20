@@ -62,6 +62,12 @@
               <p>Pedidos</p>
             </a>
           </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="CodigoQR/">
+              <i class="material-icons">blur_linear</i>
+              <p>Generar QR</p>
+            </a>
+          </li>
           <!-- your sidebar here -->
         </ul>
       </div>
@@ -173,14 +179,13 @@
                           <th>QR</th>
                           <th>Direccion 1</th>
                           <th>Direccion 2</th>
-                          <th>Tiempo Aproximado</th>
                           <th>Estado</th>
                           <th>Editar </th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
-                        $query = "select pedido.idPedido, nombre, FechaEntrega, CodigoQR, pedido.DireccionPredeterminada, cliente.Direccion, Tiempo_Aproximado, estado from cliente, pedido, estado, ruta where Cliente.idCliente = Pedido.idCliente and Pedido.idEstado = Estado.idEstado and Pedido.idRuta = Ruta.idRuta ";
+                        $query = "select pedido.idPedido, nombre, FechaEntrega, CodigoQR, pedido.DireccionPredeterminada, cliente.Direccion, estado from cliente, pedido, estado where Cliente.idCliente = Pedido.idCliente and Pedido.idEstado = Estado.idEstado";
                         $tabla = mysqli_query($conectar, $query);
 
                         while ($fila = mysqli_fetch_array($tabla)) {?>
@@ -188,10 +193,17 @@
                             <td><?php echo $fila['idPedido']?></td>
                             <td><?php echo $fila['nombre']?></td>
                             <td><?php echo $fila['FechaEntrega']?></td>
-                            <td><?php echo $fila['CodigoQR']?></td>
+                            <td> <?php 
+                            if ($fila['CodigoQR']== "") {
+                              echo $fila['CodigoQR'];
+                            }else{
+                              echo '<IMG SRC="CodigoQR/'.$fila['CodigoQR'].'" width="100px" height="100px>"';
+                            }
+                           ?>
+                              
+                            </td>
                             <td><?php echo $fila['DireccionPredeterminada']?></td>
                             <td><?php echo $fila['Direccion']?></td>
-                            <td><?php echo $fila['Tiempo_Aproximado']?></td>
                             <td><?php echo $fila['estado']?></td>
                                 <td>
                                   <a rel="tooltip"  title class="btn btn-success btn-link btn-sm editbtn" data-original-title="Editar" aria-describedby="tooltip578613">
