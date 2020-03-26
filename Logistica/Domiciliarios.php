@@ -609,6 +609,32 @@
         <script src="assets/demo/demo.js"></script>
 
 
+    <?php 
+          if (isset($_POST["mensaje"])) {
+            if($_POST["mensaje"] === "1") {
+              echo '<script>
+                      $(document).ready(function() {
+                       md.showNotification("success","done","Se ha guardado correctamente",100,"bottom","right");
+                    });
+                  </script>';
+
+            } 
+          if($_POST["mensaje"] === "2") {
+              echo '<script>
+                      $(document).ready(function() {
+                       md.showNotification("success","done_all","Se ha modificado correctamente",100,"bottom","right");
+                    });
+                  </script>';
+            }
+          if($_POST["mensaje"] === "3") {
+              echo '<script>
+                      $(document).ready(function() {
+                       md.showNotification("success","done_all","Se ha deshabilitado correctamente",100,"bottom","right");
+                    });
+                  </script>';
+            } 
+          }
+         ?>
 
 
         <script>

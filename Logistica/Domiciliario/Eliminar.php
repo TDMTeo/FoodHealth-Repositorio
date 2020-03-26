@@ -10,7 +10,12 @@ if (isset($_POST['Eliminar'])) {
 	$query = "UPDATE domiciliario set estado = '$Cambio'  where iddomiciliario = '$idDomiciliario'";
 	$borrar = mysqli_query($conectar, $query);
 	if ($borrar) {
-		header("Location: ../Domiciliarios.php?status=3");
+		 // header("Location: ../Domiciliarios.php?status=3");
+		 echo '<body onload="document.formulario.submit()">
+           <form action="../Domiciliarios.php" method="post" name="formulario">
+           <input type="hidden" name="mensaje" value="3">
+           </body>
+           </form> ';
 		}
 	else
 		{

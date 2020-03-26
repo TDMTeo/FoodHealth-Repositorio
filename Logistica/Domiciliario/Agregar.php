@@ -32,7 +32,12 @@ if (isset($_POST['Agregar'])) {
 
 		$guardar2 =mysqli_query($conectar, $query2);
 		if ($guardar2) {
-			header("Location: ../Domiciliarios.php?status=2");
+			//header("Location: ../Domiciliarios.php?status=2");
+			 echo '<body onload="document.formulario.submit()">
+           <form action="../Domiciliarios.php" method="post" name="formulario">
+           <input type="hidden" name="mensaje" value="1">
+           </body>
+           </form> ';
 		}
 		else{
 			echo "Error al guardar en Domiciliario:";
