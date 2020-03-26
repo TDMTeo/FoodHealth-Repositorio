@@ -1,8 +1,8 @@
-<//?php
+<?php
   session_start();
   if(!isset($_SESSION['Perfil'])) 
     {
-        header('Location: ../login/');  
+         header('Location: ../');  
     }
 ?>
 
@@ -94,8 +94,8 @@
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                  <a class="dropdown-item" href="#">Perfil</a>
-                  <a class="dropdown-item" href="#">Configurar</a>
+                  <a class="dropdown-item" href="Perfil.php">Perfil</a>
+                  <a class="dropdown-item" href="Perfil/Editar.php">Configurar</a>
                   <div class="dropdown-divider"></div>
                      <a class="dropdown-item" href="cerrarsesion.php">Cerrar Sesion</a>
                 </div>

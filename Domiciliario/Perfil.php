@@ -2,13 +2,14 @@
   session_start();
   if(!isset($_SESSION['Perfil'])) 
     {
-         header('Location: ../../');  
+        header('Location: ../');  
     }
 ?>
+<!doctype html>
 <html lang="en">
 
-<head> 
-  <title>Domiciliario!</title>
+<head>
+  <title>Jefe de logística</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -21,14 +22,15 @@
   <link rel="stylesheet" href="plugins/sweetAlert2/sweetalert2.min.css">  
       
   <link rel="stylesheet" href="plugins/animate.css/animate.css">  
+  <link rel="stylesheet" type="text/css" href="assets/css/Estilo.css">
+  <link rel="shortcut icon" type="image/x-icon" href="img/admin.png">
 </head>
-
   <?php include("php/conexion.php");
   ?>  
 
 <body>
   <div class="wrapper ">
-    <div class="sidebar" data-color="green" data-background-color="white">
+     <div class="sidebar" data-color="green" data-background-color="white">
       <div class="logo">
         <a href="index.php" class="simple-text logo-mini">
           FoodHealth
@@ -36,7 +38,7 @@
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="nav-item    ">
+          <li class="nav-item">
             <a class="nav-link" href="index.php">
               <i class="material-icons">dashboard</i>
               <p>Inicio</p>
@@ -48,7 +50,7 @@
               <p>Pedidos</p>
             </a>
           </li>
-           <li class="nav-item active">
+          <li class="nav-item ">
             <a class="nav-link" href="Calificaciones_Domiciliario.php">
               <i class="material-icons">fastfood</i>
               <p>Calificaciones</p>
@@ -60,7 +62,7 @@
     </div>
     <div class="main-panel">
       <!-- Navbar -->
- <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <a class="navbar-brand" href="javascript:;">Inicio</a>
@@ -104,76 +106,197 @@
         </div>
       </nav>
       <!-- End Navbar -->
-           
-       <div class="content">
+      <div class="content">
         <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
+                    <div class="row">
+            <div class="col-md-8">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Mis calificaciones</h4>
-                  <p class="card-category">
-                    <?php if (isset($_SESSION['mensaje'])) {
-                      echo $_SESSION['mensaje']; 
-                      unset( $_SESSION['mensaje'] ); 
-                      } ?>
-                  </p>
+                  <h4 class="card-title">Perfil</h4>
+                  <p class="card-category"></p>
                 </div>
-                 <div class="card-body">
-                  <form action="php/GuardarRuta.php" method="POST">
+                <div class="card-body">
+                  <?php 
+
+                    include('php/Conexion.php');
+                    $idUsuario =  $_SESSION['idUsuario'] ;
+                    $consulta = mysqli_query($conectar,"SELECT * from domiciliario where idUsuario = '$idUsuario'");
+
+                    $domiciliario = mysqli_fetch_array($consulta);
+
+                    $n_Documento = $domiciliario["n_Documento"];
+                    $idTipoDocumento = $domiciliario["idTipoDocumento"];
+                    $nombres = $domiciliario["nombres"];
+                    $apellidos = $domiciliario["apellidos"];
+                    $telefono = $domiciliario["telefono"];
+                    $direccion = $domiciliario["direccion"];
+                    $idMunicipio =  $domiciliario["idMunicipio"];
+                    $codigopostal = $domiciliario["codigopostal"];
+                    $descripcion = $domiciliario["aboutme"];
+
+                    //Sacar el nombre del municipio
+
+                    $consulta2 =  mysqli_query($conectar,"SELECT nombre from municipio where idMunicipio = '$idMunicipio'");
+
+                    $Municipio = mysqli_fetch_array($consulta2);
+
+                    $Nombre_Municipio = $Municipio["nombre"];
+
+                    //Sacar el nombre del tipo de documento
+
+                    $consulta3 =  mysqli_query($conectar,"SELECT nombre from tipodocumento where idTipoDocumento = '$idTipoDocumento'");
+
+                    $TipoDocumento = mysqli_fetch_array($consulta3);
+
+                    $Nombre_TipoDocumento = $TipoDocumento["nombre"];
+
+                    //Sacar El nombre del rol que esta logeado
+                    $consulta4 =  mysqli_query($conectar,"SELECT Perfil from Usuarios where idUsuario = '$idUsuario'");
+
+                    $a = mysqli_fetch_array($consulta4);
+
+                    $idRol = $a["Perfil"];
+
+                    $consulta5 =  mysqli_query($conectar,"SELECT nombre from Rol where idRol = '$idRol'");
+
+                    $b = mysqli_fetch_array($consulta5);
+
+                    $Nombre_Rol = $b["nombre"];
+
+                   ?>
+                  <form>
                     <div class="row">
-                      <div class="col-6 col-sm-6 col-md-12">
-                        <div class="form-gruop">
-                            <div class="input-field col 12">
-                                <select class="custom-select" name="idDomiciliario" required>
-                                    <option value="0">Domiciliario:</option>
-                                    <?php
-                                    $sql = "SELECT * FROM domiciliario";
-                                    $query = $conectar->query ($sql);
-                                    while ($valores = mysqli_fetch_array($query)) {
-                                        echo '<option value="'.$valores[idDomiciliario].'">'.$valores[nombres].'</option>';
-                                    }
-                                    ?>
-                                </select>
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Nombres</label>
+                            <div class="tim-typo">
+                              <p>
+                                <?php echo $nombres; ?>
+                              </p>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3" style="margin-left: -55px">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Apellidos</label>
+                          <div class="tim-typo">
+                              <p>
+                                <?php echo $apellidos; ?>
+                              </p>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Telefono</label>
+                          <div class="tim-typo">
+                              <p>
+                               <?php echo $telefono; ?>
+                              </p>
                             </div>
                         </div>
                       </div>
                     </div>
-                    <br>
                     <div class="row">
-                      <div class="col-md-3">
+                      <div class="col-md-4">
                         <div class="form-group">
-                          <label class="bmd-label-floating">Tiempo Estimado</label>
-                          <input type="number" class="form-control" name="Tiempo_Estimado" required>
+                          <label class="bmd-label-floating">Documento</label>
+                          <div class="tim-typo">
+                              <p>
+                                <?php echo $n_Documento; ?>
+                              </p>
+                            </div>
                         </div>
                       </div>
-                    <div class="col-3 col-sm-3 col-md-3">
-                        <div class="form-gruop">
-                           <select class="custom-select" name="TiempoE">
-                              <option value="horas">Horas</option>
-                              <option value="minutos">Minutos</option>
-                           </select>
-                        </div>
-                      </div>
-                      <div class="col-md-3">
+                      <div class="col-md-6">
                         <div class="form-group">
-                          <label class="bmd-label-floating">Tiempo Estimado</label>
-                          <input type="number" class="form-control" name="Tiempo_Aproximado" required>
-                        </div>
-                      </div>
-                       <div class="col-3 col-sm-3 col-md-3">
-                        <div class="form-gruop">
-                           <select class="custom-select" name="TiempoA">
-                              <option value="horas">Horas</option>
-                              <option value="minutos">Minutos</option>
-                           </select>
+                          <label class="bmd-label-floating">Tipo Documento</label>
+                          <div class="tim-typo">
+                              <p>
+                                 <?php echo $Nombre_TipoDocumento; ?>
+                              </p>
+                            </div>
                         </div>
                       </div>
                     </div>
-                    <br>
-                    <input type="submit" class="btn btn-success" name="AsignarRuta" value="Asignar Ruta">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Direccion</label>
+                          <div class="tim-typo">
+                              <p>
+                               <?php echo $direccion; ?>
+                              </p>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Municipio</label>
+                          <div class="tim-typo">
+                              <p>
+                                <?php echo $Nombre_Municipio; ?>
+                              </p>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4" style="margin-left: -56px">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Codigo Postal</label>
+                          <div class="tim-typo">
+                              <p>
+                                <?php echo $codigopostal; ?>
+                              </p>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Descripcion</label>
+                          <div class="form-group">
+                            <label class="bmd-label-floating"> </label>
+                            <div class="tim-typo">
+                              <p>
+                                <?php echo $descripcion; ?>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--<button type="submit" class="btn btn-primary pull-right">Update Profile</button>-->
+                    <div class="clearfix"></div>
                   </form>
-                 </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card card-profile">
+                <div class="card-avatar">
+                   <a href="javascript:;">
+                    <?php 
+
+                      include('php/Conexion.php');
+                      $idUsuario =  $_SESSION['idUsuario'] ;
+                      $consulta = mysqli_query($conectar,"SELECT * from domiciliario where idUsuario = '$idUsuario'");
+
+                      $domiciliario = mysqli_fetch_array($consulta);
+
+                      $fotoperfil = $domiciliario["foto"];
+                     ?>
+                    <img class="img" src="Perfil/<?php echo $fotoperfil?>" />
+                  </a>
+                </div>
+                <div class="card-body">
+                  <h6 class="card-category text-gray"> <?php echo $Nombre_Rol; ?></h6>
+                  <h4 class="card-title"><?php echo $nombres; ?></h4>
+                  <p class="card-description">
+                   <?php echo $descripcion; ?>
+                  </p>
+                  <a href="Perfil/Editar.php" class="btn btn-primary btn-round">modificar</a>
+                </div>
               </div>
             </div>
           </div>
@@ -191,19 +314,11 @@
             </ul>
           </nav>
           <!-- your footer here -->
+          
         </div>
       </footer>
     </div>
   </div>
-<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> --> 
-<!-- De aqui pa abajo estan los copiados -->
-
    <script src="assets/js/core/jquery.min.js"></script>
   <script src="assets/js/core/popper.min.js"></script>
   <script src="assets/js/core/bootstrap-material-design.min.js"></script>
@@ -246,15 +361,8 @@
   <script src="assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
+
   
-
-  <!-- Sweet Alert  -->
-
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
 </body>
-
 
 </html>

@@ -153,7 +153,13 @@
                             <td><?php echo $fila['nombres']?></td>
                             <td><?php echo $fila['Tiempo_Aproximado']?></td>
                             <td><?php echo $fila['Tiempo_Estimado']?></td>
-                            <td><IMG SRC="CodigoQR/<?php echo $fila['CodigoQR']?>" width="100px" height="100px>"></td>
+                            <td><?php 
+                            if ($fila['CodigoQR']== "") {
+                              echo $fila['CodigoQR'];
+                            }else{
+                              echo '<IMG SRC="CodigoQR/'.$fila['CodigoQR'].'" width="100px" height="100px>"';
+                            }
+                           ?></td>
                             <td><?php echo $fila['DireccionPredeterminada']?></td>
                             <td><?php echo $fila['Estado']?></td>
                           </tr>

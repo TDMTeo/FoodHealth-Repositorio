@@ -1,4 +1,10 @@
-
+<?php
+  session_start();
+  if(!isset($_SESSION['Perfil'])) 
+    {
+         header('Location: ../../');  
+    }
+?>
 <?php    
 include('../php/Conexion.php');
 include('../../login/login.php');

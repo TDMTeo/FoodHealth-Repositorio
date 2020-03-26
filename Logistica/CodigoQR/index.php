@@ -251,9 +251,20 @@
                   <div class="card-body">
                       <div class="modal-body">
                       <input type="hidden" name="update_id" id="update_id">
-                      <input type="text" class="form-control" name="Pedido_id" id="Pedido_id" style="visibility:hidden">
-                      <input type="hidden" name="n_Documento" id="n_Documento">
 
+                      <input type="hidden" name="n_Documento" id="n_Documento">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <label><h2>Informacion</h2></label>
+                        </div>
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="Valor" id="Valor" value="Valor" 
+                              minlength="5" maxlength="40" required  onKeyUp="this.value = this.value.toUpperCase();">
+                            </div>
+                          </div>
+                      </div>
+                    <input type="text" class="form-control" name="Pedido_id" id="Pedido_id" style="visibility:hidden">
                 </div>
                 <div class="modal-footer">
                   <!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>-->
@@ -334,6 +345,7 @@
               $('#update_id').val(data[0]);
               $('#Pedido_id').val(data[0]);
               $('#n_Documento').val(data[6]);
+              $('#Valor').val(data[6]);
           });
         });
       </script>

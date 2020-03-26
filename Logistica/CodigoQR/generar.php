@@ -1,3 +1,10 @@
+<?php
+  session_start();
+  if(!isset($_SESSION['Perfil'])) 
+    {
+         header('Location: ../../');  
+    }
+?>
 <?php 
 
 include('../php/Conexion.php');
@@ -8,6 +15,7 @@ require 'phpqrcode/qrlib.php';
 if (isset($_POST['Modificar'])) {
 
   $Pedido_id = $_POST['Pedido_id'];
+  $Valor = $_POST['Valor'];
   $Documento  = $_POST['n_Documento'];
 
 	$dir = "CodigosGenerados"."/".$Documento."/";
@@ -21,7 +29,12 @@ if (isset($_POST['Modificar'])) {
 	$tamanio = 15;
 	$level = 'H';
 	$frameSize = 1;
-	$contenido = $Documento;
+  if ($Documento == $Valor ) {
+      $contenido = $Documento;
+  }
+  else{
+     $contenido = $Valor;
+  }
 
 	QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
 

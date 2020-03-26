@@ -2,7 +2,7 @@
   session_start();
   if(!isset($_SESSION['Perfil'])) 
     {
-        header('Location: ../login/');  
+          header('Location: ../../');  
     }
 ?>
 

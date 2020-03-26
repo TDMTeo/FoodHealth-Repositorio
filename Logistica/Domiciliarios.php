@@ -2,7 +2,7 @@
       <?php
       session_start();
       if (!isset($_SESSION['Perfil'])) {
-        header('Location: ../login/');
+        header('Location: ../');
       }
       ?>
       <!doctype html>
@@ -111,7 +111,7 @@
                         <a class="dropdown-item" href="Perfil.php">Perfil</a>
                         <a class="dropdown-item" href="Perfil/Editar.php">Configurar</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="../login/cerrarsesion.php">Cerrar Sesion</a>
+                        <a class="dropdown-item" href="cerrarsesion.php">Cerrar Sesion</a>
                       </div>
                     </li>
                   </ul>
@@ -172,7 +172,6 @@
                                 padding: '3em',
                                 timer: 1500,
                                 showConfirmButton: false
-                                
                               })
                     </script>"
                     ?>

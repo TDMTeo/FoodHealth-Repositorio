@@ -11,9 +11,9 @@ include('../php/Conexion.php');
 
 if (isset($_POST['Modificar'])) {
     $idUsuario =  $_SESSION['idUsuario'] ;
-    $consulta = mysqli_query($conectar,"SELECT * from jefe_logistica where idUsuario = '$idUsuario'");
-    $jefe_logistica = mysqli_fetch_array($consulta);
-    $idjefe_logistica = $jefe_logistica["idjefe_logistica"];
+    $consulta = mysqli_query($conectar,"SELECT * from domiciliario where idUsuario = '$idUsuario'");
+    $domiciliario = mysqli_fetch_array($consulta);
+    $iddomiciliario = $domiciliario["iddomiciliario"];
 
 	$nombres = $_POST['nombres'];
 	$apellidos = $_POST['apellidos'];
@@ -38,7 +38,7 @@ if (isset($_POST['Modificar'])) {
 	move_uploaded_file($archivo,$ruta);
 
 
-	$query = "UPDATE jefe_logistica set  nombres = '$nombres', apellidos = '$apellidos', telefono = '$telefono',n_Documento = '$documento',  idTipoDocumento = '$TDocumento', direccion = '$direccion', idMunicipio = '$Municipio', codigopostal = '$codigopostal',  aboutme = '$descripcion', foto = '$ruta' where idjefe_logistica = $idjefe_logistica";
+	$query = "UPDATE domiciliario set  nombres = '$nombres', apellidos = '$apellidos', telefono = '$telefono',n_Documento = '$documento',  idTipoDocumento = '$TDocumento', direccion = '$direccion', idMunicipio = '$Municipio', codigopostal = '$codigopostal',  aboutme = '$descripcion', foto = '$ruta' where iddomiciliario = $iddomiciliario";
 
 	$Actualizar = mysqli_query($conectar,$query);
 

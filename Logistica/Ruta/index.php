@@ -17,7 +17,7 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
 <html lang="en">
 
 <head>
-  <title>Rutas lorem  </title>
+  <title>Rutas </title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
@@ -165,11 +165,11 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
               <?php
             }
           }
-          ?>
+              ?>
+         
           <div class="row">
             <div class="col-md-12">
               <div class="card">
-
                 <div class="card-header card-header-primary">
                   <h4 class="card-title "> Rutas </h4>
                   <div class="pull-right">
@@ -283,6 +283,28 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
   <script src="../assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/demo/demo.js"></script>
+<!--<script>
+              $(document).ready(function() {
+               md.showNotification("No hay pedidos con codigo QR","top","left");
+            });
+          </script>
+-->
+<?php 
+  if (isset($_POST["mensaje"])) {
+    if($_POST["mensaje"] === "1") {
+      echo '<script>
+              $(document).ready(function() {
+               md.showNotification("warning","info","Verifique que los pedidos tengan su QR y/o Estado Correspondiente",100,"bottom","right");
+            });
+          </script>';
+    }
+    
+  }
+
+
+ ?>
+
+        
 
   
 </body>
