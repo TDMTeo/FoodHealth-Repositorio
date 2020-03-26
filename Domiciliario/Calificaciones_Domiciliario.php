@@ -126,7 +126,7 @@
                         <div class="form-gruop">
                             <div class="input-field col 12">
                                 <select class="custom-select" name="idDomiciliario" required>
-                                    <option value="0">Domiciliario:</option>
+                                    <option value="">Selecciona un domiciliario</option>
                                     <?php
                                     $sql = "SELECT * FROM domiciliario";
                                     $query = $conectar->query ($sql);
@@ -143,32 +143,26 @@
                     <div class="row">
                       <div class="col-md-3">
                         <div class="form-group">
-                          <label class="bmd-label-floating">Tiempo Estimado</label>
-                          <input type="number" class="form-control" name="Tiempo_Estimado" required>
-                        </div>
-                      </div>
-                    <div class="col-3 col-sm-3 col-md-3">
-                        <div class="form-gruop">
-                           <select class="custom-select" name="TiempoE">
+                          <label class="bmd-label-floating">Tiempo estimado</label>
+                          <input type="number" class="form-control" name="Tiempo_Estimado" required><br>
+                          <select class="custom-select" name="TiempoE">
                               <option value="horas">Horas</option>
                               <option value="minutos">Minutos</option>
                            </select>
                         </div>
                       </div>
+                    
                       <div class="col-md-3">
                         <div class="form-group">
-                          <label class="bmd-label-floating">Tiempo Estimado</label>
-                          <input type="number" class="form-control" name="Tiempo_Aproximado" required>
-                        </div>
-                      </div>
-                       <div class="col-3 col-sm-3 col-md-3">
-                        <div class="form-gruop">
-                           <select class="custom-select" name="TiempoA">
+                          <label class="bmd-label-floating">Tiempo aproximado</label>
+                          <input type="number" class="form-control" name="Tiempo_Aproximado" required><br>
+                          <select class="custom-select" name="TiempoA">
                               <option value="horas">Horas</option>
                               <option value="minutos">Minutos</option>
                            </select>
                         </div>
                       </div>
+                       
                     </div>
                     <br>
                     <input type="submit" class="btn btn-success" name="AsignarRuta" value="Asignar Ruta">

@@ -9,7 +9,7 @@
         private $mysqli = '';
         private $usuario = 'root';
         private $clave = '';
-        private $server = 'localhost:3306';
+        private $server = 'localhost:3307';
         private $db = 'foodhealth';
 
 
