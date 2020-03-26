@@ -157,35 +157,34 @@
                         <tr>
                           <th>#</th>
                           <th>Cliente</th>
-                          <th>Fecha</th>
-                          <th>QR</th>
-                          <th>Direccion 1</th>
-                          <th>Direccion 2</th>
+                          <th>CodigoQR</th>
                           <th>Tiempo Aproximado</th>
+                          <th>Tiempo Estimado</th>
                           <th>Estado</th>
-                          <th>Editar </th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
-                        $query = "select pedido.idPedido, nombre, FechaEntrega, CodigoQR, DireccionPredeterminada, Direccion, Tiempo_Aproximado, estado from direccion, cliente, pedido, estado, ruta where Direccion.idCliente = Cliente.idCliente and Cliente.idPedido = Pedido.idPedido and Pedido.idEstado = Estado.idEstado and Pedido.idRuta = Ruta.idRuta";
+                        $idUsuario =  $_SESSION['idUsuario'] ;
+                        $consulta = mysqli_query($conectar,"SELECT * from domiciliario where idUsuario = '$idUsuario'");
+                        $domiciliario = mysqli_fetch_array($consulta);
+                        $idDomiciliario = $domiciliario["iddomiciliario"];
+                        $query = "select pedido.idPedido, CONCAT(Cliente.nombre, ' ', Cliente.apellido) As 'Nombre', pedido.CodigoQR, Ruta.Tiempo_Aproximado, ruta.Tiempo_Estimado, Estado from pedido, cliente, ruta, estado where cliente.idcliente = pedido.idCliente and pedido.idRuta = ruta.idRuta and pedido.idEstado = estado.idEstado and ruta.idDomiciliario = $idDomiciliario";
                         $tabla = mysqli_query($conectar, $query);
-
                         while ($fila = mysqli_fetch_array($tabla)) {?>
                           <tr>
                             <td><?php echo $fila['idPedido']?></td>
-                            <td><?php echo $fila['nombre']?></td>
-                            <td><?php echo $fila['FechaEntrega']?></td>
-                            <td><?php echo $fila['CodigoQR']?></td>
-                            <td><?php echo $fila['DireccionPredeterminada']?></td>
-                            <td><?php echo $fila['Direccion']?></td>
+                            <td><?php echo $fila['Nombre']?></td>
+                            <td><?php 
+                             if ($fila['CodigoQR']== "") {
+                              echo $fila['CodigoQR'];
+                            }else{
+                              echo '<IMG SRC="../Logistica/CodigoQR/'.$fila['CodigoQR'].'" width="100px" height="100px>"';
+                            }
+                            ?></td>
                             <td><?php echo $fila['Tiempo_Aproximado']?></td>
-                            <td><?php echo $fila['estado']?></td>
-                                <td>
-                                  <a rel="tooltip"  title class="btn btn-success btn-link btn-sm editbtn" data-original-title="Editar" aria-describedby="tooltip578613">
-                                     <i class="material-icons">edit</i>
-                                  </a>
-                                </td>
+                            <td><?php echo $fila['Tiempo_Estimado']?></td>
+                            <td><?php echo $fila['Estado']?></td>
                           </tr>
                         <?php } ?>
                       </tbody>
