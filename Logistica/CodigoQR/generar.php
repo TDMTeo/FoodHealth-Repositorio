@@ -8,9 +8,9 @@
 <?php 
 
 include('../php/Conexion.php');
-include('../../login/login.php');
+
 require 'phpqrcode/qrlib.php';
-  session_start();
+
 
 if (isset($_POST['Modificar'])) {
 
@@ -38,14 +38,19 @@ if (isset($_POST['Modificar'])) {
 
 	QRcode::png($contenido, $filename, $level, $tamanio, $frameSize);
 
-  $Estado = $_POST['Estado'];
+
 
     $query = "UPDATE pedido set CodigoQR = '$filename' where idPedido = $Pedido_id";
 
   $Actualizar = mysqli_query($conectar,$query);
 
   if ($Actualizar) {
-    header("Location: index.php?status=1");
+    //header("Location: index.php?status=1");
+       echo '<body onload="document.formulario.submit()">
+           <form action="index.php" method="post" name="formulario">
+           <input type="hidden" name="mensaje" value="1">
+           </body>
+           </form> ';
     }
   else
     {

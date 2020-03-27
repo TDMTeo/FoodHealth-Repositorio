@@ -7,8 +7,6 @@
 ?>
 <?php    
 include('../php/Conexion.php');
-include('../../login/login.php');
-  session_start();
 
 if (isset($_POST['Modificar'])) {
 
@@ -21,7 +19,12 @@ if (isset($_POST['Modificar'])) {
   $Actualizar = mysqli_query($conectar,$query);
 
   if ($Actualizar) {
-    header("Location: ../Pedidos.php?status=1");
+   // header("Location: ../Pedidos.php?status=1");
+   echo '<body onload="document.formulario.submit()">
+           <form action="../Pedidos.php" method="post" name="formulario">
+           <input type="hidden" name="mensaje" value="1">
+           </body>
+           </form> ';
     }
   else
     {

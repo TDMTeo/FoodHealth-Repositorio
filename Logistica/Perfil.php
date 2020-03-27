@@ -373,7 +373,29 @@
   <script src="assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
+   <?php 
+          if (isset($_POST["mensaje"])) {
+            if($_POST["mensaje"] === "1") {
+              echo '<script>
+                      $(document).ready(function() {
+                       md.showNotification("success","done","Se ha cambiado correctamente",100,"bottom","right");
+                    });
+                  </script>';
 
+            } 
+            if($_POST["mensaje"] === "1") {
+              echo '<script>
+                      $(document).ready(function() {
+                       md.showNotification("waring","done","Error",100,"bottom","right");
+                    });
+                  </script>';
+
+            } 
+
+
+      
+          }
+         ?>
   
 </body>
 
