@@ -10,4 +10,4 @@ ALTER TABLE `cliente` ADD `n_Documento` INT(13) NOT NULL AFTER `apellido`;
 Cambio en la tabla Domiciliario
 
 ALTER TABLE `domiciliario` ADD `foto` varchar(255) NULL AFTER `estado`;
-nada
+nadas
