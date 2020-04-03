@@ -10,3 +10,20 @@ ALTER TABLE `cliente` ADD `n_Documento` INT(13) NOT NULL AFTER `apellido`;
 Cambio en la tabla Domiciliario
 
 ALTER TABLE `domiciliario` ADD `foto` varchar(255) NULL AFTER `estado`;
+
+Nueva tabla de notificaciones
+
+create table Notificaciones (
+id int(11) not null AUTO_INCREMENT PRIMARY key,
+de int(11) not null,
+para int(11) not null,
+asunto varchar(60), 
+mensaje text,
+fecha_envio date,
+hora_envio time,
+leido varchar(30), 
+fecha_lectura date,
+hora_lectura time,
+CONSTRAINT de FOREIGN KEY(de) REFERENCES usuarios(idUsuario),
+CONSTRAINT para FOREIGN KEY(para) REFERENCES usuarios(idUsuario) 
+);

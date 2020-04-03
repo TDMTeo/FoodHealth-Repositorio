@@ -24,6 +24,26 @@
   <link rel="stylesheet" href="plugins/animate.css/animate.css">  
   <link rel="stylesheet" type="text/css" href="assets/css/Estilo.css">
   <link rel="shortcut icon" type="image/x-icon" href="img/admin.png">
+  <script src="assets/js/core/jquery.min.js"></script>
+  <script>
+        $(document).ready(function (){
+          $('.view').on('click', function(event){
+              var id = 2;
+              $.ajax({
+                type:"POST",
+                url:"index.php",
+                data:{id:id},
+                success: function(data){
+                      $('#Notificacion').modal('show');
+                      $div = $(this).closest('div');
+                      $('#id').val(event.target.attributes[2].value);
+                      $('#asunto').val(event.target.text.trim());
+                      $('#mensaje').val(event.target.attributes[3].value);
+                  }
+                });
+          });
+        });
+      </script>
 </head>
   <?php include("php/conexion.php");
   ?>  
@@ -91,14 +111,34 @@
               <li class="nav-item dropdown">
                 <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">notifications</i>
-                  <span class="notification">1</span>
+                  <span class="notification">
+                       <?php 
+
+                     $idUsuario = $_SESSION['idUsuario'];
+
+                     $consulta = mysqli_query($conectar,'SELECT COUNT(id) as "Cantidad" from notificaciones where para = '.$idUsuario.' and leido = "no"');
+
+                     $notificaciones = mysqli_fetch_array($consulta);
+                     $cantidad = $notificaciones["Cantidad"];
+
+                     echo $cantidad;
+                   ?>
+                  </span>
                   <p class="d-lg-none d-md-block">
                     Notificaciones 
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="Pedidos.php">Se ha cambiado de estado del pedido</a>
-                </div>
+                <?php
+                 $no_leidos = "SELECT * from notificaciones where para = ".$idUsuario." and leido = 'no' ORDER BY id DESC LIMIT 4";
+                  $leido = mysqli_query($conectar, $no_leidos);
+                  while ($notificaciones = mysqli_fetch_array($leido)) {
+                    ?>
+                     <a class="dropdown-item view" href="#" id="<?php echo $notificaciones['id']?>" descripcion="<?php echo $notificaciones['mensaje']?>">
+                       <?php echo $notificaciones['asunto'] ?>
+                      </a>        
+               <?php } ?>
+               </div>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -174,6 +214,68 @@
 
         </div>
       </div>
+              <!-------------------------------------------------- Modal para editar estado ------------------------------------------------------>
+        <div class="modal fade" id="Notificacion" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalScrollableTitle">Notificacion </h5>
+                </div>
+                  <div class="card-body">
+                    <form action="Notificaciones/leido.php" method="POST">
+                   <h2><?php /*
+                      $Usuario = $_POST['id'];
+                      echo $Usuario;
+                       */?></h2> 
+                 <div class="modal-body">
+                            <div class="form-group">
+                              <label></label>
+                              <input type="hidden" class="form-control" name="id" id="id" value="id" required>
+                              <input type="text" class="form-control" name="asunto" id="asunto" value="asunto" required>
+                              <input type="text" class="form-control" name="mensaje" id="mensaje" value="mensaje" required>
+                            </div>
+                  <div class="row">
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Asunto</label>
+                            <div class="tim-typo">
+                              <p>
+                            
+                              </p>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3" style="margin-left: -55px">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Apellidos</label>
+                          <div class="tim-typo">
+                              <p>
+
+                              </p>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">Telefono</label>
+                          <div class="tim-typo">
+                              <p>
+
+                              </p>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                   <button type="submit" class="btn btn-primary" name="Cerrar" value="Cerrar">Cerrar</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-----------------------------------------------------Modal para editar estado ------------------------------------------------------->
       <footer class="footer">
         <div class="container-fluid">
           <nav class="float-left">
@@ -191,7 +293,7 @@
       </footer>
     </div>
   </div>
-   <script src="assets/js/core/jquery.min.js"></script>
+
   <script src="assets/js/core/popper.min.js"></script>
   <script src="assets/js/core/bootstrap-material-design.min.js"></script>
   <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
@@ -234,7 +336,33 @@
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
 
-  
+      <?php 
+          if (isset($_POST["mensaje"])) {
+            if($_POST["mensaje"] === "1") {
+              echo '<script>
+                      $(document).ready(function() {
+                       md.showNotification("success","done","Se ha leido la notificacion",100,"bottom","right");
+                    });
+                  </script>';
+
+            } 
+          if($_POST["mensaje"] === "2") {
+              echo '<script>
+                      $(document).ready(function() {
+                       md.showNotification("success","done_all","Se ha modificado correctamente",100,"bottom","right");
+                    });
+                  </script>';
+            }
+          if($_POST["mensaje"] === "3") {
+              echo '<script>
+                      $(document).ready(function() {
+                       md.showNotification("success","done_all","Se ha deshabilitado correctamente",100,"bottom","right");
+                    });
+                  </script>';
+            } 
+          }
+         ?>
+
 </body>
 
 </html>

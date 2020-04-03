@@ -1,4 +1,3 @@
-
       <?php
       session_start();
       if (!isset($_SESSION['Perfil'])) {
@@ -607,7 +606,7 @@
         <script src="assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
         <!-- Material Dashboard DEMO methods, don't include it in your project! -->
         <script src="assets/demo/demo.js"></script>
-
+         
 
     <?php 
           if (isset($_POST["mensaje"])) {
