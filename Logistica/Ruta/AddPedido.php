@@ -10,7 +10,7 @@ if (!isset($_POST["Pedido"])) {
     return;
 }
 $Pedido = $_POST["Pedido"];
-include_once "conexion.php";
+include_once "../php/Conexion.php";
 $sentencia = $base_de_datos->prepare("SELECT * FROM pedido WHERE idPedido = ? LIMIT 1;");
 $sentencia->execute([$Pedido]);
 $pedidos = $sentencia->fetch(PDO::FETCH_OBJ);

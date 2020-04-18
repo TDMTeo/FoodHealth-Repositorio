@@ -47,7 +47,7 @@ if (isset($_POST['Modificar'])) {
   if ($Actualizar) {
     //header("Location: index.php?status=1");
        echo '<body onload="document.formulario.submit()">
-           <form action="index.php" method="post" name="formulario">
+           <form action="../Pedidos/CodigoQR.php" method="post" name="formulario">
            <input type="hidden" name="mensaje" value="1">
            </body>
            </form> ';

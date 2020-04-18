@@ -11,7 +11,7 @@
 $Tiempo_aproximado = $_POST["Tiempo_Aproximado"];
 $JefeLogistica = $_POST["JefeLogistica"];
 $Domiciliario = $_POST["domiciliario"];
-include_once "conexion.php";
+include_once "../php/Conexion.php";
 
 $sentencia = $base_de_datos->prepare("INSERT INTO ruta(idJefeLogistica, iddomiciliario, Tiempo_Aproximado) VALUES (?, ?, ?);");
 $sentencia->execute([$JefeLogistica, $Domiciliario, $Tiempo_aproximado]);
@@ -35,7 +35,11 @@ $base_de_datos->commit();
 
 unset($_SESSION["carrito"]);
 $_SESSION["carrito"] = [];
-header("Location: ./index.php?status=2");
+			 echo '<body onload="document.formulario.submit()">
+           <form action="./" method="post" name="formulario">
+           <input type="hidden" name="mensaje" value="1">
+           </body>
+           </form> ';
 //}
 //else{
 	

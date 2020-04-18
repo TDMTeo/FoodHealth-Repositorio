@@ -45,18 +45,14 @@ if (isset($_POST['Modificar'])) {
 	if ($Actualizar) {
 	    //header("Location: ../Perfil.php?status=1");
 	     echo '<body onload="document.formulario.submit()">
-           <form action="../Perfil.php" method="post" name="formulario">
+           <form action="./" method="post" name="formulario">
            <input type="hidden" name="mensaje" value="1">
            </body>
            </form> ';
 		}
 	else
 		{
-			 echo '<body onload="document.formulario.submit()">
-           <form action="../Perfil.php" method="post" name="formulario">
-           <input type="hidden" name="mensaje" value="2">
-           </body>
-           </form> ';
+			echo $query;
 		}
 	
 

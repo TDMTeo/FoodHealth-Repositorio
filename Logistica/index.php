@@ -1,347 +1,474 @@
 <?php
-  session_start();
-  if(!isset($_SESSION['Perfil'])) 
-    {
-        header('Location: ../');  
-    }
+session_start();
+if(!isset($_SESSION['Perfil'])) 
+{
+  header('Location: ../');  
+}
 ?>
-<!doctype html>
-<html lang="en">
+<?php 
+include_once 'php/Conexion.php';
+$sentencia = $base_de_datos->query("SELECT Ruta.idRuta, CONCAT(domiciliario.nombres,' ',domiciliario.apellidos) as 'Nombre', ruta.Tiempo_Aproximado, GROUP_CONCAT(Pedido.idPedido,'..', pedido.CodigoQR, '..', estado.Estado SEPARATOR '__') AS pedido 
 
-<head>
-  <title>Jefe de logística</title>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <!--     Fonts and icons     -->
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
-  <!-- Material Kit CSS -->
-  <link href="assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
-  <link rel="stylesheet" href="plugins/sweetAlert2/sweetalert2.min.css">  
-      
-  <link rel="stylesheet" href="plugins/animate.css/animate.css">  
-  <link rel="stylesheet" type="text/css" href="assets/css/Estilo.css">
-  <link rel="shortcut icon" type="image/x-icon" href="img/admin.png">
-  <script src="assets/js/core/jquery.min.js"></script>
-  <script>
-        $(document).ready(function (){
-          $('.view').on('click', function(event){
-              var id = 2;
-              $.ajax({
-                type:"POST",
-                url:"index.php",
-                data:{id:id},
-                success: function(data){
-                      $('#Notificacion').modal('show');
-                      $div = $(this).closest('div');
-                      $('#id').val(event.target.attributes[2].value);
-                      $('#asunto').val(event.target.text.trim());
-                      $('#mensaje').val(event.target.attributes[3].value);
-                  }
-                });
-          });
-        });
-      </script>
-</head>
-  <?php include("php/conexion.php");
-  ?>  
+FROM ruta INNER JOIN domiciliario ON domiciliario.idDomiciliario = ruta.idDomiciliario INNER JOIN pedido ON pedido.idRuta = ruta.idRuta INNER JOIN estado ON estado.idEstado = pedido.idEstado GROUP BY ruta.idRuta ORDER BY ruta.idRuta");
 
-<body>
-  <div class="wrapper ">
-    <div class="sidebar" data-color="green" data-background-color="white">
-      <div class="logo">
-        <a href="index.php" class="simple-text logo-mini">
-          FoodHealth
-        </a>
-      </div>
-      <div class="sidebar-wrapper">
-        <ul class="nav">
-          <li class="nav-item active   ">
-            <a class="nav-link" href="index.php">
-              <i class="material-icons">dashboard</i>
-              <p>Inicio</p>
+$Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
+
+     $validacion = "SELECT Ruta.idRuta, CONCAT(domiciliario.nombres,' ',domiciliario.apellidos) as 'Nombre', ruta.Tiempo_Aproximado, GROUP_CONCAT(Pedido.idPedido,'..', pedido.CodigoQR, '..', estado.Estado SEPARATOR '__') AS pedido 
+
+                    FROM ruta INNER JOIN domiciliario ON domiciliario.idDomiciliario = ruta.idDomiciliario INNER JOIN pedido ON pedido.idRuta = ruta.idRuta INNER JOIN estado ON estado.idEstado = pedido.idEstado GROUP BY ruta.idRuta ORDER BY ruta.idRuta";
+
+      $validacionB = mysqli_query($conectar, $validacion);
+      while ($ValidarRuta = mysqli_fetch_array($validacionB)) {
+          $idRuta = $ValidarRuta['idRuta'];
+        }
+
+?>
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="apple-touch-icon" sizes="76x76" href="img/admin.png">
+        <link rel="icon" type="image/x-icon" href="img/admin.png">
+       
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>Jefe de Logistica</title>
+        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+        <meta name="viewport" content="width=device-width" />
+        <!-- Canonical SEO -->
+        <link rel="canonical" href="https://www.creative-tim.com/product/material-dashboard-pro" />
+        <!--  Social tags      -->
+        <meta name="keywords" content="material dashboard, bootstrap material admin, bootstrap material dashboard, material design admin, material design, creative tim, html dashboard, html css dashboard, web dashboard, freebie, free bootstrap dashboard, css3 dashboard, bootstrap admin, bootstrap dashboard, frontend, responsive bootstrap dashboard, premiu material design admin">
+        <meta name="description" content="Material Dashboard PRO is a Premium Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
+        <!-- Schema.org markup for Google+ -->
+        <meta itemprop="name" content="Material Dashboard PRO by Creative Tim | Premium Bootstrap Admin Template">
+        <meta itemprop="description" content="Material Dashboard PRO is a Premium Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
+        <meta itemprop="image" content="../../../s3.amazonaws.com/creativetim_bucket/products/51/opt_mdp_thumbnail.jpg">
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@creativetim">
+        <meta name="twitter:title" content="Material Dashboard PRO by Creative Tim | Premium Bootstrap Admin Template">
+        <meta name="twitter:description" content="Material Dashboard PRO is a Premium Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design.">
+        <meta name="twitter:creator" content="@creativetim">
+        <meta name="twitter:image" content="../../../s3.amazonaws.com/creativetim_bucket/products/51/opt_mdp_thumbnail.jpg">
+        <!-- Open Graph data -->
+        <meta property="fb:app_id" content="655968634437471">
+        <meta property="og:title" content="Material Dashboard PRO by Creative Tim | Premium Bootstrap Admin Template" />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="http://www.creative-tim.com/product/material-dashboard-pro" />
+        <meta property="og:image" content="../../../s3.amazonaws.com/creativetim_bucket/products/51/opt_mdp_thumbnail.jpg" />
+        <meta property="og:description" content="Material Dashboard PRO is a Premium Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design." />
+        <meta property="og:site_name" content="Creative Tim" />
+        <!-- Bootstrap core CSS     -->
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+        <!--  Material Dashboard CSS    -->
+        <link href="assets/css/material-dashboard.css" rel="stylesheet" />
+        <!--  CSS for Demo Purpose, don't include it in your project     -->
+        <link href="assets/css/demo.css" rel="stylesheet" />
+        <!--     Fonts and icons     -->
+        <link href="assets/css/font-awesome.css" rel="stylesheet" />
+        <link href="assets/css/google-roboto-300-700.css" rel="stylesheet" />
+
+
+
+    </head>
+    <?php 
+    
+     $idUsuario = $_SESSION['idUsuario'];
+
+     $consulta = mysqli_query($conectar,'Select * From Usuarios,jefe_logistica where usuarios.idUsuario = jefe_logistica.idUsuario and  usuarios.idUsuario = '. $idUsuario);
+
+     $informacion = mysqli_fetch_array($consulta);
+
+     $nombre = $informacion["nombres"];
+
+     $apellidos = $informacion["apellidos"];
+
+     $nombreCompleto = $nombre. ' '. $apellidos;
+
+     $foto = $informacion["foto"];
+
+    ?>  
+    <body>
+        <div class="wrapper">
+            <div class="sidebar" data-active-color="green" data-background-color="white" data-image="assets/img/sid.jpg">
+                <!--
+            Tip 1: You can change the color of active element of the sidebar using: data-active-color="purple | blue | green | orange | red | rose"
+            Tip 2: you can also add an image using data-image tag
+            Tip 3: you can change the color of the sidebar with data-background-color="white | black"
+        -->
+        <div class="logo">
+            <a href="index.html" class="simple-text">
+                FoodHealth
             </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="Domiciliarios.php">
-              <i class="material-icons">directions_run</i>
-              <p>Domiciliarios</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="Ruta/">
-              <i class="material-icons">directions_bike</i>
-              <p>Ruta</p>
-            </a>
-          </li>
-           <li class="nav-item ">
-            <a class="nav-link" href="Pedidos.php">
-              <i class="material-icons">fastfood</i>
-              <p>Pedidos</p>
-            </a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="CodigoQR/">
-              <i class="material-icons">blur_linear</i>
-              <p>Generar QR</p>
-            </a>
-          </li>
-
-          <!-- your sidebar here -->
-        </ul>
-      </div>
-    </div>
-    <div class="main-panel">
-      <!-- Navbar -->
- <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-        <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <a class="navbar-brand" href="javascript:;">Inicio</a>
-          </div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="navbar-toggler-icon icon-bar"></span>
-            <span class="navbar-toggler-icon icon-bar"></span>
-            <span class="navbar-toggler-icon icon-bar"></span>
-          </button>
-          <div class="collapse navbar-collapse justify-content-end"> 
-            <ul class="navbar-nav">
-              <li class="nav-item dropdown">
-                <a class="nav-link" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="material-icons">notifications</i>
-                  <span class="notification">
-                       <?php 
-
-                     $idUsuario = $_SESSION['idUsuario'];
-
-                     $consulta = mysqli_query($conectar,'SELECT COUNT(id) as "Cantidad" from notificaciones where para = '.$idUsuario.' and leido = "no"');
-
-                     $notificaciones = mysqli_fetch_array($consulta);
-                     $cantidad = $notificaciones["Cantidad"];
-
-                     echo $cantidad;
-                   ?>
-                  </span>
-                  <p class="d-lg-none d-md-block">
-                    Notificaciones 
-                  </p>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                <?php
-                 $no_leidos = "SELECT * from notificaciones where para = ".$idUsuario." and leido = 'no' ORDER BY id DESC LIMIT 4";
-                  $leido = mysqli_query($conectar, $no_leidos);
-                  while ($notificaciones = mysqli_fetch_array($leido)) {
-                    ?>
-                     <a class="dropdown-item view" href="#" id="<?php echo $notificaciones['id']?>" descripcion="<?php echo $notificaciones['mensaje']?>">
-                       <?php echo $notificaciones['asunto'] ?>
-                      </a>        
-               <?php } ?>
-               </div>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="material-icons">person</i>
-                  <p class="d-lg-none d-md-block">
-                    Cuenta
-                  </p>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                  <a class="dropdown-item" href="Perfil.php">Perfil</a>
-                  <a class="dropdown-item" href="Perfil/Editar.php">Configurar</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="cerrarsesion.php">Cerrar Sesion</a>
-                </div>
-              </li>
-            </ul>
-          </div>
         </div>
-      </nav>
-      <!-- End Navbar -->
-      <div class="content">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-header card-header-primary">
-                  <h4 class="card-title ">Rutas</h4>
-                  <p class="card-category">Este es el historial de las rutas </p>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th>Domiciliario</th>
-                          <th>Tiempo Aproximado</th>
-                          <th>Tiempo Estimado</th>
-                          <th>Codigo QR</th>
-                          <th>Direccion Predeterminada</th>
-                          <th>Estado</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php
-                        $query = "select nombres, Tiempo_Aproximado, Tiempo_Estimado, CodigoQR, DireccionPredeterminada,Estado.Estado 
-                          from domiciliario, ruta, pedido, estado
-                          where domiciliario.idDomiciliario = ruta.idDomiciliario and ruta.idRuta = pedido.idRuta and pedido.idEstado = estado.idEstado";
-                        $tabla = mysqli_query($conectar, $query);
-
-                        while ($fila = mysqli_fetch_array($tabla)) {?>
-                          <tr>
-                            <td><?php echo $fila['nombres']?></td>
-                            <td><?php echo $fila['Tiempo_Aproximado']?></td>
-                            <td><?php echo $fila['Tiempo_Estimado']?></td>
-                            <td><?php 
-                            if ($fila['CodigoQR']== "") {
-                              echo $fila['CodigoQR'];
-                            }else{
-                              echo '<IMG SRC="CodigoQR/'.$fila['CodigoQR'].'" width="100px" height="100px>"';
-                            }
-                           ?></td>
-                            <td><?php echo $fila['DireccionPredeterminada']?></td>
-                            <td><?php echo $fila['Estado']?></td>
-                          </tr>
-                        <?php } ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        <div class="logo logo-mini">
+            <a href="index.html" class="simple-text">
+                FH
+            </a>
         </div>
-      </div>
-              <!-------------------------------------------------- Modal para editar estado ------------------------------------------------------>
-        <div class="modal fade" id="Notificacion" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalScrollableTitle">Notificacion </h5>
+        <div class="sidebar-wrapper">
+            <div class="user">
+                <div class="photo">
+                    <img src="Perfil/<?php echo $foto ?>" />
                 </div>
-                  <div class="card-body">
-                    <form action="Notificaciones/leido.php" method="POST">
-                   <h2><?php /*
-                      $Usuario = $_POST['id'];
-                      echo $Usuario;
-                       */?></h2> 
-                 <div class="modal-body">
-                            <div class="form-group">
-                              <label></label>
-                              <input type="hidden" class="form-control" name="id" id="id" value="id" required>
-                              <input type="text" class="form-control" name="asunto" id="asunto" value="asunto" required>
-                              <input type="text" class="form-control" name="mensaje" id="mensaje" value="mensaje" required>
-                            </div>
-                  <div class="row">
-                      <div class="col-md-5">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Asunto</label>
-                            <div class="tim-typo">
-                              <p>
-                            
-                              </p>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-md-3" style="margin-left: -55px">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Apellidos</label>
-                          <div class="tim-typo">
-                              <p>
-
-                              </p>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Telefono</label>
-                          <div class="tim-typo">
-                              <p>
-
-                              </p>
-                            </div>
-                        </div>
-                      </div>
+                <div class="info">
+                    <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                        <?php echo $nombreCompleto ?>
+                        <b class="caret"></b>
+                    </a>
+                    <div class="collapse" id="collapseExample">
+                        <ul class="nav">
+                            <li>
+                                <a href="Perfil/">Mi Perfil</a>
+                            </li>
+                            <li>
+                                <a href="php/cerrarsesion.php">Cerrar Sesion</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="modal-footer">
-                   <button type="submit" class="btn btn-primary" name="Cerrar" value="Cerrar">Cerrar</button>
-                </div>
-                </form>
-              </div>
             </div>
+            <ul class="nav">
+                <li class="active">
+                    <a href="./">
+                        <i class="material-icons">dashboard</i>
+                        <p>Inicio</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="Domiciliarios/">
+                        <i class="material-icons">directions_run</i>
+                        <p>Domiciliarios</p>
+                    </a>
+                </li>
+                 <li>
+                    <a data-toggle="collapse" href="#dropPedidos">
+                        <i class="material-icons">fastfood</i>
+                        <p>Pedidos
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+                    <div class="collapse" id="dropPedidos">
+                        <ul class="nav">
+                            <li>
+                                <a href="Pedidos/">Informacion</a>
+                            </li>
+                            <li>
+                                <a href="Pedidos/Codigoqr.php">Generar QR</a>
+                            </li>
+                            <li>
+                                <a href="Pedidos/Estado.php">Cambiar estado</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="Ruta/">
+                        <i class="material-icons">directions_bike</i>
+                        <p>Ruta</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-panel">
+        <nav class="navbar navbar-transparent navbar-absolute">
+            <div class="container-fluid">
+                <div class="navbar-minimize">
+                    <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon">
+                        <i class="material-icons visible-on-sidebar-regular">more_vert</i>
+                        <i class="material-icons visible-on-sidebar-mini">view_list</i>
+                    </button>
+                </div>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Inicio </a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="material-icons">notifications</i>
+                                <span class="notification">
+                                    <?php 
+
+                                    $idUsuario = $_SESSION['idUsuario'];
+
+                                    $consulta = mysqli_query($conectar,'SELECT COUNT(id) as "Cantidad" from notificaciones where para = '.$idUsuario.' and leido = "no"');
+
+                                    $notificaciones = mysqli_fetch_array($consulta);
+                                    $cantidad = $notificaciones["Cantidad"];
+
+                                    echo $cantidad;
+                                    ?>
+
+                                </span>
+                                <p class="hidden-lg hidden-md">
+                                    Notifications
+                                    <b class="caret"></b>
+                                </p>
+                            </a>
+                            <ul class="dropdown-menu">
+                               <?php
+                                 $no_leidos = "SELECT * from notificaciones where para = ".$idUsuario." and leido = 'no' ORDER BY id DESC LIMIT 4";
+                                  $leido = mysqli_query($conectar, $no_leidos);
+                                  while ($notificaciones = mysqli_fetch_array($leido)) {
+                                    ?>
+                                    <li>
+                                     <a class="view" href="#" id="<?php echo $notificaciones['id']?>" descripcion="<?php echo $notificaciones['mensaje']?>">
+                                       <?php echo $notificaciones['asunto'] ?>
+                                      </a>
+                                    </li>      
+                               <?php } ?>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="material-icons">person</i>
+                                <p class="hidden-lg hidden-md">Profile</p>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                  <a href="Perfil/">
+                                       Perfil
+                                  </a>
+                                </li> 
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="php/cerrarsesion.php">
+                                        Cerrar Sesion
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="separator hidden-lg hidden-md"></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header card-header-icon" data-background-color="green">
+                     <i class="material-icons">dashboard</i>
+                 </div>
+                 <br>
+                 <h4 class="card-title">Rutas</h4>
+                <div class="card-content">
+                 <?php 
+                        if (empty($idRuta)) {
+                            echo '
+                            <blockquote class="blockquote">
+                              <p class="mb-0">No se encuentran rutas establecidas de manera correcta</p>
+                              <footer class="blockquote-footer"><cite title="Source Title">FoodHealth</cite></footer>
+                            </blockquote>
+                            ';
+                        }
+                        else{
+                            echo '
+                            <div class="table-responsive">
+                             <table id="lookup" class="table">
+                              <div class="table-responsive">
+                                <thead>
+                                  <th>Domiciliario</th>
+                                  <th>Tiempo_Aproximado</th>
+                                  <th>Pedidos</th>
+                                </thead>
+                            ';
+                        }
+                     ?>
+
+                    <tbody>
+                      <?php foreach($Ruta as $Ruta){ ?>
+                        <th><?php echo $Ruta->Nombre ?></th>
+                        <th><?php echo $Ruta->Tiempo_Aproximado ?></th>
+                        <td>
+                          <table id="lookup" class="table">
+                            <thead>
+                              <tr>
+                                <th>Código</th>
+                                <th>Código QR</th>
+                                <th>Estado</th> 
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <?php foreach(explode("__", $Ruta->pedido) as $RutaConcatenada){ 
+                                $Route = explode("..", $RutaConcatenada)
+                                ?>
+                                <tr>
+                                  <td><?php echo $Route[0] ?></td>
+                                  <td  width="100px" height="100px"><IMG SRC="CodigoQR/<?php echo $Route[1] ?>"></td>
+                                  <td><?php echo $Route[2] ?></td>
+                                </tr>
+                              <?php } ?>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    <?php } ?>
+                  </tbody>
+                 </div>
+                </table>
+             </div>
+            </div>
+           </div>
           </div>
         </div>
-      <!-----------------------------------------------------Modal para editar estado ------------------------------------------------------->
-      <footer class="footer">
-        <div class="container-fluid">
-          <nav class="float-left">
-            <ul>
-              <li>
-                <a href="https://www.creative-tim.com">
-                  FoodHealth
-                </a>
-              </li>
-            </ul>
-          </nav>
-          <!-- your footer here -->
-          
+
+      <!-- Modal Que si se abre en responsive-->
+<div class="modal fade" id="Notificacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-notice">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                <input type="hidden" class="form-control" name="id" id="id" value="id" required>
+                <input type="text" class="form-control" name="asunto" id="asunto" value="asunto" required>
+            </div>
+            <div class="modal-body">
+                <div class="instruction">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <strong>1. Register</strong>
+                            <p>The first step is to create an account at
+                                <a href="http://www.creative-tim.com/">Creative Tim</a>. You can choose a social network or go for the classic version, whatever works best for you.</p>
+                        </div>
+                         <div class="col-md-4">
+                             <div class="picture">
+                                <img src="../../assets/img/card-1.jpg" alt="Thumbnail Image" class="img-rounded img-responsive">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="instruction">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <strong>2. Apply</strong>
+                            <p>The first step is to create an account at
+                                <a href="http://www.creative-tim.com/">Creative Tim</a>. You can choose a social network or go for the classic version, whatever works best for you.</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="picture">
+                                <img src="../../assets/img/card-2.jpg" alt="Thumbnail Image" class="img-rounded img-responsive">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <input type="text" class="form-control" name="mensaje" id="mensaje" value="mensaje" required>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-info btn-round" data-dismiss="modal">Sounds good!</button>
+            </div>
         </div>
-      </footer>
     </div>
-  </div>
+</div>
 
-  <script src="assets/js/core/popper.min.js"></script>
-  <script src="assets/js/core/bootstrap-material-design.min.js"></script>
-  <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!-- Plugin for the momentJs  -->
-  <script src="assets/js/plugins/moment.min.js"></script>
-  <!--  Plugin for Sweet Alert -->
-  <script src="assets/js/plugins/sweetalert2.js"></script>
-  <!-- Forms Validations Plugin -->
-  <script src="assets/js/plugins/jquery.validate.min.js"></script>
-  <!-- Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-  <script src="assets/js/plugins/jquery.bootstrap-wizard.js"></script>
-  <!--  Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select -->
-  <script src="assets/js/plugins/bootstrap-selectpicker.js"></script>
-  <!--  Plugin for the DateTimePicker, full documentation here: https://eonasdan.github.io/bootstrap-datetimepicker/ -->
-  <script src="assets/js/plugins/bootstrap-datetimepicker.min.js"></script>
-  <!--  DataTables.net Plugin, full documentation here: https://datatables.net/  -->
-  <script src="assets/js/plugins/jquery.dataTables.min.js"></script>
-  <!--  Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
-  <script src="assets/js/plugins/bootstrap-tagsinput.js"></script>
-  <!-- Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-  <script src="assets/js/plugins/jasny-bootstrap.min.js"></script>
-  <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-  <script src="assets/js/plugins/fullcalendar.min.js"></script>
-  <!-- Vector Map plugin, full documentation here: http://jvectormap.com/documentation/ -->
-  <script src="assets/js/plugins/jquery-jvectormap.js"></script>
-  <!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
-  <script src="assets/js/plugins/nouislider.min.js"></script>
-  <!-- Include a polyfill for ES6 Promises (optional) for IE11, UC Browser and Android browser support SweetAlert -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-  <!-- Library for adding dinamically elements -->
-  <script src="assets/js/plugins/arrive.min.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-  <!-- Chartist JS -->
-  <script src="assets/js/plugins/chartist.min.js"></script>
-  <!--  Notifications Plugin    -->
-  <script src="assets/js/plugins/bootstrap-notify.js"></script>
-  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
-  <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-  <script src="assets/demo/demo.js"></script>
+      <!-- Finalizarr el modal responsive -->
 
-      <?php 
+
+
+
+
+
+
+<footer class="footer">
+    <div class="container-fluid">
+        <nav class="pull-left">
+
+        </nav>
+                      <!--  <p class="copyright pull-right">
+                            &copy;
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script>
+                            <a href="http://www.creative-tim.com/">Creative Tim</a>, made with love for a better web
+                        </p>
+                    -->
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+<!--   Core JS Files   -->
+<script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
+<script src="assets/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="assets/js/material.min.js" type="text/javascript"></script>
+<script src="assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
+<!-- Forms Validations Plugin -->
+<script src="assets/js/jquery.validate.min.js"></script>
+<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+<script src="assets/js/moment.min.js"></script>
+<!--  Charts Plugin -->
+<script src="assets/js/chartist.min.js"></script>
+<!--  Plugin for the Wizard -->
+<script src="assets/js/jquery.bootstrap-wizard.js"></script>
+<!--  Notifications Plugin    -->
+<script src="assets/js/bootstrap-notify.js"></script>
+<!--   Sharrre Library    -->
+<script src="assets/js/jquery.sharrre.js"></script>
+<!-- DateTimePicker Plugin -->
+<script src="assets/js/bootstrap-datetimepicker.js"></script>
+<!-- Vector Map plugin -->
+<script src="assets/js/jquery-jvectormap.js"></script>
+<!-- Sliders Plugin -->
+<script src="assets/js/nouislider.min.js"></script>
+<!--  Google Maps Plugin    -->
+<!--<script src="https://maps.googleapis.com/maps/api/js"></script>-->
+<!-- Select Plugin -->
+<script src="assets/js/jquery.select-bootstrap.js"></script>
+<!--  DataTables.net Plugin    -->
+<script src="assets/js/jquery.datatables.js"></script>
+<!-- Sweet Alert 2 plugin -->
+<script src="assets/js/sweetalert2.js"></script>
+<!--    Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+<script src="assets/js/jasny-bootstrap.min.js"></script>
+<!--  Full Calendar Plugin    -->
+<script src="assets/js/fullcalendar.min.js"></script>
+<!-- TagsInput Plugin -->
+<script src="assets/js/jquery.tagsinput.js"></script>
+<!-- Material Dashboard javascript methods -->
+<script src="assets/js/material-dashboard.js"></script>
+<!-- Material Dashboard DEMO methods, don't include it in your project! -->
+<script src="assets/js/demo.js"></script>
+<script type="text/javascript">
+    $().ready(function() {
+        demo.initMaterialWizard();
+    });
+</script>
+          <script>
+                $(document).ready(function (){
+                  $('.view').on('click', function(event){
+                      var id = 2;
+                      $.ajax({
+                        type:"POST",
+                        url:"index.php",
+                        data:{id:id},
+                        success: function(data){
+                              $('#Notificacion').modal('show');
+                              $div = $(this).closest('div');
+                              $('#id').val(event.target.attributes[2].value);
+                              $('#asunto').val(event.target.text.trim());
+                              $('#mensaje').val(event.target.attributes[3].value);
+                          }
+                        });
+                  });
+                });
+         </script>
+
+         <?php 
           if (isset($_POST["mensaje"])) {
             if($_POST["mensaje"] === "1") {
               echo '<script>
                       $(document).ready(function() {
-                       md.showNotification("success","done","Se ha leido la notificacion",100,"bottom","right");
+                       md.showNotification("bottom","right","success",100,"done","Mensaje leido");
                     });
                   </script>';
 
@@ -363,6 +490,6 @@
           }
          ?>
 
-</body>
 
+<!-- Mirrored from demos.creative-tim.com/material-dashboard-pro/examples/dashboard.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Mar 2017 21:32:16 GMT -->
 </html>
