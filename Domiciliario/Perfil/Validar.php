@@ -7,13 +7,13 @@
 ?>
 <?php 	 
 include('../php/Conexion.php');
-  session_start();
+
 
 if (isset($_POST['Modificar'])) {
     $idUsuario =  $_SESSION['idUsuario'] ;
     $consulta = mysqli_query($conectar,"SELECT * from domiciliario where idUsuario = '$idUsuario'");
     $domiciliario = mysqli_fetch_array($consulta);
-    $iddomiciliario = $domiciliario["iddomiciliario"];
+    $idDomiciliario = $domiciliario["iddomiciliario"];
 
 	$nombres = $_POST['nombres'];
 	$apellidos = $_POST['apellidos'];
@@ -38,25 +38,21 @@ if (isset($_POST['Modificar'])) {
 	move_uploaded_file($archivo,$ruta);
 
 
-	$query = "UPDATE domiciliario set  nombres = '$nombres', apellidos = '$apellidos', telefono = '$telefono',n_Documento = '$documento',  idTipoDocumento = '$TDocumento', direccion = '$direccion', idMunicipio = '$Municipio', codigopostal = '$codigopostal',  aboutme = '$descripcion', foto = '$ruta' where iddomiciliario = $iddomiciliario";
+	$query = "UPDATE domiciliario set  nombres = '$nombres', apellidos = '$apellidos', telefono = '$telefono',n_Documento = '$documento',  idTipoDocumento = '$TDocumento', direccion = '$direccion', idMunicipio = '$Municipio', codigopostal = '$codigopostal',  aboutme = '$descripcion', foto = '$ruta' where iddomiciliario = $idDomiciliario";
 
 	$Actualizar = mysqli_query($conectar,$query);
 
 	if ($Actualizar) {
-	  //header("Location: ../Perfil.php?status=1");
-		echo '<body onload="document.formulario.submit()">
-           <form action="../Perfil.php" method="post" name="formulario">
+	    //header("Location: ../Perfil.php?status=1");
+	     echo '<body onload="document.formulario.submit()">
+           <form action="./" method="post" name="formulario">
            <input type="hidden" name="mensaje" value="1">
            </body>
            </form> ';
 		}
 	else
 		{
-			 echo '<body onload="document.formulario.submit()">
-           <form action="../Perfil.php" method="post" name="formulario">
-           <input type="hidden" name="mensaje" value="2">
-           </body>
-           </form> ';
+			echo $query;
 		}
 	
 

@@ -42,18 +42,18 @@ if(!isset($_SESSION['Perfil']))
         <meta property="og:description" content="Material Dashboard PRO is a Premium Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design." />
         <meta property="og:site_name" content="Creative Tim" />
         <!-- Bootstrap core CSS     -->
-        <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
         <!--  Material Dashboard CSS    -->
-        <link href="assets/css/material-dashboard.css" rel="stylesheet" />
+        <link href="../assets/css/material-dashboard.css" rel="stylesheet" />
         <!--  CSS for Demo Purpose, don't include it in your project     -->
-        <link href="assets/css/demo.css" rel="stylesheet" />
+        <link href="../assets/css/demo.css" rel="stylesheet" />
         <!--     Fonts and icons     -->
-        <link href="assets/css/font-awesome.css" rel="stylesheet" />
-        <link href="assets/css/google-roboto-300-700.css" rel="stylesheet" />
+        <link href="../assets/css/font-awesome.css" rel="stylesheet" />
+        <link href="../assets/css/google-roboto-300-700.css" rel="stylesheet" />
 
 </head>
 
-    <?php include("php/Conexion.php");
+    <?php include("../php/Conexion.php");
 
      $idUsuario = $_SESSION['idUsuario'];
 
@@ -68,6 +68,9 @@ if(!isset($_SESSION['Perfil']))
      $nombreCompleto = $nombre. ' '. $apellidos;
 
      $foto = $informacion["foto"];
+
+     $idDomiciliiaro = $informacion["iddomiciliario"];
+
 
     ?>  
     <body>
@@ -91,7 +94,7 @@ if(!isset($_SESSION['Perfil']))
         <div class="sidebar-wrapper">
             <div class="user">
                 <div class="photo">
-                    <img src="Perfil/<?php echo $foto ?>" />
+                    <img src="../Perfil/<?php echo $foto ?>" />
                 </div>
                 <div class="info">
                     <a data-toggle="collapse" href="#collapseExample" class="collapsed">
@@ -112,13 +115,13 @@ if(!isset($_SESSION['Perfil']))
             </div>
             <ul class="nav">
                 <li>
-                    <a href="./">
+                    <a href="../">
                         <i class="material-icons">dashboard</i>
                         <p>Inicio</p>
                     </a>
                 </li>
                 <li>
-                    <a href="Pedidos/">
+                    <a href="./">
                         <i class="material-icons">fastfood</i>
                         <p>Pedidos</p>
                     </a>
@@ -195,13 +198,13 @@ if(!isset($_SESSION['Perfil']))
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                  <a href="Perfil/">
+                                  <a href="../Perfil/">
                                        Perfil
                                   </a>
                                 </li> 
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="php/cerrarsesion.php">
+                                    <a href="../php/cerrarsesion.php">
                                         Cerrar Sesion
                                     </a>
                                 </li>
@@ -214,9 +217,105 @@ if(!isset($_SESSION['Perfil']))
         </nav>
         <div class="content">
           <div class="container-fluid">
-			Soy el mapa :D
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="green">
+                        <i class="material-icons">fastfood</i>
+                    </div>
+                    <br>    
+                    <h4 class="card-title">Informacion -
+                    	 <small class="category">Pedidos de su Ruta</small>
+                    </h4>
+                    <div class="card-content">
+                        <div class="table-responsive">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Nombre del Cliente</th>
+                                  <th>Fecha</th>
+                                  <th>Codigo QR</th>
+                                  <th>Direccion de entrega</th>
+                                  <th>Estado</th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <?php
+                                $query = "select pedido.idPedido, concat(nombre,' ',apellido) as 'Nombre', FechaEntrega, CodigoQR, pedido.DireccionPredeterminada, cliente.Direccion, estado.Estado as 'Estado' from cliente, pedido, estado, ruta, domiciliario where Cliente.idCliente = Pedido.idCliente and Pedido.idEstado = Estado.idEstado and pedido.idRuta = ruta.idRuta and Ruta.idDomiciliario = Domiciliario.iddomiciliario and domiciliario.iddomiciliario = '$idDomiciliiaro'";
+                                $tabla = mysqli_query($conectar, $query);
+
+                                while ($fila = mysqli_fetch_array($tabla)) {?>
+                                  <tr>
+                                  	<td><?php echo $fila['idPedido'] ?></td>
+                                    <td><?php echo $fila['Nombre']?></td>
+                                    <td><?php echo $fila['FechaEntrega']?></td>
+                                    <td width="130px" height="130px"> <?php 
+                                    if ($fila['CodigoQR']== "") {
+                                      echo 'Codigo QR no asignado';
+                                    }else{
+                                      echo '<IMG SRC="../../Logistica/CodigoQR/'.$fila['CodigoQR'].'">';
+                                    }
+                                   ?>
+                                      
+                                    </td>
+                                    <td><?php echo $fila['DireccionPredeterminada']?></td>
+                                    <td><?php echo $fila['Estado']?></td>
+                                      <td class="td-actions text-right">
+                                         <a class="btn btn-success btn-simple editar" rel="tooltip" title="Editar">
+                                           <i class="material-icons">edit</i>
+                                        </a>
+                                      </td>
+                                  </tr>
+                                <?php } ?>
+                              </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+             </div>
            </div>
          </div>
+
+
+                 <!-------------------------------------------------- Modal para editar estado ------------------------------------------------------>
+        <div class="modal fade" id="Modificar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-small ">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                        <h5 class="modal-title" id="myModalLabel">Estados</h5>
+                    </div>
+                        <div class="modal-body text-center">
+                            <form method="POST" action="validar.php">
+                            <div class="card-content">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Estado</label>
+                                     <select name="Estado" class="form-control" title="Estado" required>
+                                        <option disabled="" selected="" value=""></option>
+                                        <?php
+                                          $sql = "select * from estado where idEstado = 4";
+                                          $query = $conectar->query ($sql);
+                                          while ($valores = mysqli_fetch_array($query)) {
+                                              echo '<option value="'.$valores[idEstado].'">'.$valores[Estado].'</option>';
+                                          }
+                                          ?>
+                                    </select>
+                                </div>
+                                    <input type="hidden" name="update_id" id="update_id">
+                                    <input type="text" class="form-control" name="Estado_id" id="Estado_id" style="visibility:hidden">
+                            </div>
+                    <div class="modal-footer text-center">
+                        <button type="button" class="btn btn-simple" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success btn-simple" name="Modificar" value="Modificar">Modificar</button>
+                    </div>
+                 </form>
+                </div>
+              </div> 
+            </div>
+        </div>
+      <!-----------------------------------------------------Modal para editar estado ------------------------------------------------------->
+
         <footer class="footer">
             <div class="container-fluid">
                 <nav class="pull-left">
@@ -229,51 +328,99 @@ if(!isset($_SESSION['Perfil']))
 </div>
 
 <!--   Core JS Files   -->
-<script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
-<script src="assets/js/jquery-ui.min.js" type="text/javascript"></script>
-<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="assets/js/material.min.js" type="text/javascript"></script>
-<script src="assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
+<script src="../assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
+<script src="../assets/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="../assets/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../assets/js/material.min.js" type="text/javascript"></script>
+<script src="../assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
 <!-- Forms Validations Plugin -->
-<script src="assets/js/jquery.validate.min.js"></script>
+<script src="../assets/js/jquery.validate.min.js"></script>
 <!--  Plugin for Date Time Picker and Full Calendar Plugin-->
-<script src="assets/js/moment.min.js"></script>
+<script src="../assets/js/moment.min.js"></script>
 <!--  Charts Plugin -->
-<script src="assets/js/chartist.min.js"></script>
+<script src="../assets/js/chartist.min.js"></script>
 <!--  Plugin for the Wizard -->
-<script src="assets/js/jquery.bootstrap-wizard.js"></script>
+<script src="../assets/js/jquery.bootstrap-wizard.js"></script>
 <!--  Notifications Plugin    -->
-<script src="assets/js/bootstrap-notify.js"></script>
+<script src="../assets/js/bootstrap-notify.js"></script>
 <!--   Sharrre Library    -->
-<script src="assets/js/jquery.sharrre.js"></script>
+<script src="../assets/js/jquery.sharrre.js"></script>
 <!-- DateTimePicker Plugin -->
-<script src="assets/js/bootstrap-datetimepicker.js"></script>
+<script src="../assets/js/bootstrap-datetimepicker.js"></script>
 <!-- Vector Map plugin -->
-<script src="assets/js/jquery-jvectormap.js"></script>
+<script src="../assets/js/jquery-jvectormap.js"></script>
 <!-- Sliders Plugin -->
-<script src="assets/js/nouislider.min.js"></script>
+<script src="../assets/js/nouislider.min.js"></script>
 <!--  Google Maps Plugin    -->
 <!--<script src="https://maps.googleapis.com/maps/api/js"></script>-->
 <!-- Select Plugin -->
-<script src="assets/js/jquery.select-bootstrap.js"></script>
+<script src="../assets/js/jquery.select-bootstrap.js"></script>
 <!--  DataTables.net Plugin    -->
-<script src="assets/js/jquery.datatables.js"></script>
+<script src="../assets/js/jquery.datatables.js"></script>
 <!-- Sweet Alert 2 plugin -->
-<script src="assets/js/sweetalert2.js"></script>
+<script src="../assets/js/sweetalert2.js"></script>
 <!--    Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-<script src="assets/js/jasny-bootstrap.min.js"></script>
+<script src="../assets/js/jasny-bootstrap.min.js"></script>
 <!--  Full Calendar Plugin    -->
-<script src="assets/js/fullcalendar.min.js"></script>
+<script src="../assets/js/fullcalendar.min.js"></script>
 <!-- TagsInput Plugin -->
-<script src="assets/js/jquery.tagsinput.js"></script>
+<script src="../assets/js/jquery.tagsinput.js"></script>
 <!-- Material Dashboard javascript methods -->
-<script src="assets/js/material-dashboard.js"></script>
+<script src="../assets/js/material-dashboard.js"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-<script src="assets/js/demo.js"></script>
+<script src="../assets/js/demo.js"></script>
 <script type="text/javascript">
     $().ready(function() {
         demo.initMaterialWizard();
     });
 </script>
+        <script>
+
+          $(document).ready(function (){
+            $('.editar').on('click', function(){
+
+              $('#Modificar').modal('show');
+
+                $tr = $(this).closest('tr');
+
+                var data = $tr.children("td").map(function(){
+                  return $(this).text();
+                }).get();
+
+                console.log(data);
+
+                    $('#update_id').val(data[0]);
+                    $('#Estado_id').val(data[0]);
+
+            });
+          });
+
+        </script>
+            <?php 
+          if (isset($_POST["mensaje"])) {
+            if($_POST["mensaje"] === "1") {
+              echo '<script>
+                      $(document).ready(function() {
+                       demo.showNotification("bottom","right","success",100,"fastfood","Se ha modificado exitosamente");
+                    });
+                  </script>';
+
+            } 
+          if($_POST["mensaje"] === "2") {
+              echo '<script>
+                      $(document).ready(function() {
+                       demo.showNotification("bottom","right","success",100,"done","Domiciliario modificado exitosamente");
+                    });
+                  </script>';
+            }
+          if($_POST["mensaje"] === "3") {
+              echo '<script>
+                      $(document).ready(function() {
+                       demo.showNotification("bottom","right","success",100,"done","Domiciliario deshabilitado exitosamente");
+                    });
+                  </script>';
+            } 
+          }
+         ?>
 </body>
 </html>
