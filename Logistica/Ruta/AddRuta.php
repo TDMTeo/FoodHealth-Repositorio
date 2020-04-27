@@ -317,9 +317,9 @@
                                      <select name="domiciliario" id="domiciliario" class="form-control" required>
                                      <option disabled="" selected="" value=""></option>
                                       <?php
-                                      $query = $conectar -> query ("SELECT * FROM domiciliario where estado = 1");
+                                      $query = $conectar -> query ("SELECT iddomiciliario, concat(nombres,' ', apellidos) as 'Nombres'FROM domiciliario where estado = 1");
                                       while ($valores = mysqli_fetch_array($query)) {
-                                        echo '<option value="'.$valores[iddomiciliario].'">'.$valores[nombres].'</option>';
+                                        echo '<option value="'.$valores[iddomiciliario].'">'.$valores[Nombres].'</option>';
                                       }
                                       ?>
                                     </select>

@@ -443,25 +443,25 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
         demo.initMaterialWizard();
     });
 </script>
-          <script>
-                $(document).ready(function (){
-                  $('.view').on('click', function(event){
-                      var id = 2;
-                      $.ajax({
-                        type:"POST",
-                        url:"index.php",
-                        data:{id:id},
-                        success: function(data){
-                              $('#Notificacion').modal('show');
-                              $div = $(this).closest('div');
-                              $('#id').val(event.target.attributes[2].value);
-                              $('#asunto').val(event.target.text.trim());
-                              $('#mensaje').val(event.target.attributes[3].value);
-                          }
-                        });
-                  });
+  <script>
+        $(document).ready(function (){
+          $('.view').on('click', function(event){
+              var id = 2;
+              $.ajax({
+                type:"POST",
+                url:"index.php",
+                data:{id:id},
+                success: function(data){
+                      $('#Notificacion').modal('show');
+                      $div = $(this).closest('div');
+                      $('#id').val(event.target.attributes[2].value);
+                      $('#asunto').val(event.target.text.trim());
+                      $('#mensaje').val(event.target.attributes[3].value);
+                  }
                 });
-         </script>
+          });
+        });
+ </script>
 
          <?php 
           if (isset($_POST["mensaje"])) {

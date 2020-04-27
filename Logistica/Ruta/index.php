@@ -164,7 +164,7 @@ $Ruta = $sentencia->fetchAll(PDO::FETCH_OBJ);
                     </div>
                 </li>
                 <li class="active">
-                    <a href="Ruta/">
+                    <a href="./">
                         <i class="material-icons">directions_bike</i>
                         <p>Ruta</p>
                     </a>

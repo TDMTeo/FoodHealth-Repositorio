@@ -32,7 +32,7 @@ if (isset($_POST['Agregar'])) {
 		$idUsuario = $a["idUsuario"];
 
 
-			$ruta = "../"."Perfil"."/"."photos"."/".$n_Documento;
+			$ruta = "../../Domiciliario/"."Perfil"."/"."photos"."/".$n_Documento;
 
 			$rutaFoto = "photos"."/".$n_Documento; 
 
@@ -62,11 +62,6 @@ if (isset($_POST['Agregar'])) {
 		else{
 			echo "Error al guardar en Domiciliario:";
 			echo $query2;
-		   /* echo '<body onload="document.formulario.submit()">
-           <form action="./" method="post" name="formulario">
-           <input type="hidden" name="mensaje" value="1">
-           </body>
-           </form> '; */
 		}
 	}
 	else{

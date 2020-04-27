@@ -29,5 +29,12 @@ CONSTRAINT de FOREIGN KEY(de) REFERENCES usuarios(idUsuario),
 CONSTRAINT para FOREIGN KEY(para) REFERENCES usuarios(idUsuario) 
 );
 =======
-nadas
->>>>>>> 3efd8bc8c880065fab079ee19cf03f300d987a7a
+
+
+Cambios a la tabla de Pedidos
+ALTER TABLE `pedido` ADD `indexZ` INT(11) NULL AFTER `DireccionPredeterminada`;
+ALTER TABLE `pedido` ADD `Tiempo_Estimado` VARCHAR(45) NULL AFTER `indexZ`;
+
+
+Cambios a la tabla de Rutas 
+ALTER TABLE `ruta` DROP `Tiempo_Estimado`;

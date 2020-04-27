@@ -68,7 +68,14 @@ if(!isset($_SESSION['Perfil']))
      $nombreCompleto = $nombre. ' '. $apellidos;
 
      $foto = $informacion["foto"];
+    
+    $idDomiciliario = $informacion["iddomiciliario"];
 
+    $query = "select pedido.indexZ,pedido.idPedido, concat(nombre,' ',apellido) as 'Nombre', FechaEntrega, pedido.DireccionPredeterminada, pedido.Tiempo_Estimado from cliente, pedido, estado, ruta, domiciliario where Cliente.idCliente = Pedido.idCliente and Pedido.idEstado = Estado.idEstado and pedido.idRuta = ruta.idRuta and Ruta.idDomiciliario = Domiciliario.iddomiciliario and domiciliario.iddomiciliario = '$idDomiciliario' and pedido.Tiempo_Estimado is null order by pedido.indexZ";
+    $validacionB = mysqli_query($conectar, $query);
+      while ($ValidarRuta = mysqli_fetch_array($validacionB)) {
+          $idRuta = $ValidarRuta['idPedido'];
+        }
     ?>  
     <body>
         <div class="wrapper">
@@ -100,7 +107,7 @@ if(!isset($_SESSION['Perfil']))
                     </a>
                     <div class="collapse" id="collapseExample">
                         <ul class="nav">
-                            <li class="active">
+                            <li>
                                 <a href="./">Mi Perfil</a>
                             </li>
                             <li>
@@ -111,7 +118,7 @@ if(!isset($_SESSION['Perfil']))
                 </div>
             </div>
             <ul class="nav">
-                <li>
+                <li class="active">
                     <a href="./">
                         <i class="material-icons">dashboard</i>
                         <p>Inicio</p>
@@ -217,6 +224,96 @@ if(!isset($_SESSION['Perfil']))
 			Soy el mapa :D
            </div>
          </div>
+
+        <!-------------------------------------------------- Modal para dar Orden ----------------------------------------------->
+        <div class="modal fade" id="Orden" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">Dale orden a tus pedidos</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th>Orden</th>
+                              <th>Direccion de entrega</th>
+                              <th>Tiempo Estimado</th>
+                            </tr>
+                          </thead>
+                      <tbody>
+                        <?php
+                        $tabla = mysqli_query($conectar, $query);
+                        $numero = 0;
+                        while ($fila = mysqli_fetch_array($tabla)) {
+                            $numero = $numero + 1;
+                            ?> 
+                          <tr>
+                            <form method="post" action="php/orden.php">
+                            <td><input type="hidden" name="idPedido" id="idPedido" value="<?php echo $fila['idPedido'] ?>" >
+                                <input type="hidden" name="idDomiciliario" id="idDomiciliario" value="<?php echo $idDomiciliario ?>">
+                            </td>
+                            <td width="10px" height="10px">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label"></label>
+                                    <input type="text" class="form-control" name="indexZ" id="indexZ" value="<?php echo $numero ?>" placeholder="<?php echo $numero ?>">
+                                </div>
+                            </td>
+                            <td><?php echo $fila['DireccionPredeterminada']?></td>
+                            <td >
+                                <div class="form-group">
+                                    <label class="label-control">Tiempo Aproximado</label>
+                                    <input type="text" class="form-control timepicker" name="tiempoEstimado" id="tiempoEstimado" value="00:00"  />
+                                </div> 
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-info btn-simple editbtn" name="Asignar" id="Asignar" rel="tooltip" title="Editar"  >
+                                   <i class="material-icons">edit</i>
+                                </button>
+                            </td>
+                            </form>
+                          </tr>
+                        <?php 
+                        }?>
+                      </tbody>
+                    </table>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="php/cerrarsesion.php" class="btn btn-primary btn-fab btn-fab-mini btn-round">
+                            <i class="material-icons" href="php/cerrarsesion.php">favorite</i>
+                        </a>
+                        <button type="submit" class="btn btn-simple">Aceptar</button>
+                    </div>
+                   <div id="sliderRegular" style="display: none"></div>
+                   <div id="sliderDouble" style="display: none"></div>
+                </div>
+            </div>
+        </div>
+      <!-----------------------------------------------------Modal para dar Orden --------------------------------------------------->
+
+        <!-------------------------------------------------- Modal para informar -------------------------------------------------->
+        <div class="modal fade" id="Informacion" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">No tiene pedidos asignados por el momento</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-simple">Nice Button</button>
+                        <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+      <!-----------------------------------------------------Modal para informar -------------------------------------------------->
+
+
         <footer class="footer">
             <div class="container-fluid">
                 <nav class="pull-left">
@@ -272,8 +369,23 @@ if(!isset($_SESSION['Perfil']))
 <script src="assets/js/demo.js"></script>
 <script type="text/javascript">
     $().ready(function() {
-        demo.initMaterialWizard();
+        md.initSliders()
+        demo.initFormExtendedDatetimepickers();
     });
+
+
 </script>
+<?php /*
+    if (empty($idRuta)) {
+        echo "<script>
+                $('#Informacion').modal('show');
+            </script>";
+    }
+    else{
+        echo "<script>
+                $('#Orden').modal('show');
+            </script>";
+    }*/
+ ?>
 </body>
 </html>

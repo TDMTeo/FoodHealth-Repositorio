@@ -356,8 +356,8 @@ if(!isset($_SESSION['Perfil']))
                                                         <div class="form-group label-floating">
                                                             <label class="control-label">Usuario
                                                                 <small>(requerido)</small>
-                                                            </label >
-                                                            <input name="Usuario" type="text" class="form-control" required onkeypress="return soloLetras(event);">
+                                                            </label>
+                                                            <input name="Usuario" type="text" class="form-control" >
                                                         </div>
                                                     </div>
                                                     <div class="input-group">
@@ -368,7 +368,7 @@ if(!isset($_SESSION['Perfil']))
                                                             <label class="control-label">Contraseña
                                                                 <small>(requerido)</small>
                                                             </label>
-                                                            <input name="Contraseña" type="password" class="form-control"required>
+                                                            <input name="Contraseña" type="password" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -381,7 +381,7 @@ if(!isset($_SESSION['Perfil']))
                                                             <label class="control-label">Correo
                                                                 <small>(requerido)</small>
                                                             </label>
-                                                            <input name="Correo" type="email" class="form-control" required>
+                                                            <input name="Correo" type="email" class="form-control" >
                                                         </div>
                                                     </div>
                                                 </div>
@@ -395,19 +395,19 @@ if(!isset($_SESSION['Perfil']))
                                                 <div class="col-sm-5 col-sm-offset-1">
                                                     <div class="form-group label-floating">
                                                         <label class="control-label">Nombre(s).</label>
-                                                        <input name="nombre" type="text" class="form-control" required onkeypress="return soloLetras(event);">
+                                                        <input name="nombre" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-5">
                                                     <div class="form-group label-floating">
                                                         <label class="control-label">Apellidos.</label>
-                                                        <input name="apellidos" type="text" class="form-control" required onkeypress="return soloLetras(event);">
+                                                        <input name="apellidos" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 col-sm-offset-1">
                                                     <div class="form-group label-floating">
                                                         <label class="control-label">Documento</label>
-                                                        <input name="documento" type="text" class="form-control" required onkeypress="return SoloNumeros(event);">
+                                                        <input name="documento" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
@@ -450,13 +450,13 @@ if(!isset($_SESSION['Perfil']))
                                                 <div class="col-sm-5">
                                                     <div class="form-group label-floating">
                                                         <label class="control-label">Telefono.</label>
-                                                        <input name="telefono" type="text" class="form-control" required onkeypress="return SoloNumeros(event);">
+                                                        <input name="telefono" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4 col-sm-offset-1">
                                                     <div class="form-group label-floating">
                                                         <label class="control-label">Codigo Postal.</label>
-                                                        <input name="codigoPostal" type="text" class="form-control" required onkeypress="return SoloNumeros(event);">
+                                                        <input name="codigoPostal" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
@@ -517,7 +517,7 @@ if(!isset($_SESSION['Perfil']))
                                             <div class="col-sm-3">
                                                 <div class="form-group label-floating is-empty">
                                                     <label class="control-label"></label>
-                                                    <input type="text" name="nombre" id="nombres"  class="form-control" value required onkeypress="return soloLetras(event);"> 
+                                                    <input type="text" name="nombre" id="nombres"  class="form-control" value>
                                                     <span class="help-block"></span>
                                                 </div>
                                             </div>
@@ -525,7 +525,7 @@ if(!isset($_SESSION['Perfil']))
                                             <div class="col-sm-5">
                                                 <div class="form-group label-floating is-empty">
                                                     <label class="control-label"></label>
-                                                    <input type="text" name="apellidos" id="apellidos" class="form-control" value required onkeypress="return soloLetras(event);">
+                                                    <input type="text" name="apellidos" id="apellidos" class="form-control" value>
                                                     <span class="help-block"></span>
                                                 </div>
                                             </div>
@@ -535,7 +535,7 @@ if(!isset($_SESSION['Perfil']))
                                             <div class="col-sm-6">
                                                 <div class="form-group label-floating is-empty">
                                                     <label class="control-label"></label>
-                                                    <input type="text" name="documento" id="Documento"  class="form-control" value required onkeypress="return SoloNumeros(event);">
+                                                    <input type="text" name="documento" id="Documento"  class="form-control" value>
                                                     <span class="help-block">Solo caracteres numericos</span>
                                                 </div>
                                             </div>
@@ -560,7 +560,7 @@ if(!isset($_SESSION['Perfil']))
                                             <div class="col-sm-4">
                                                 <div class="form-group label-floating is-empty">
                                                     <label class="control-label"></label>
-                                                    <input type="text" name="direccion" id="Direccion"  class="form-control" value required>
+                                                    <input type="text" name="direccion" id="Direccion"  class="form-control" value>
                                                     <span class="help-block"></span>
                                                 </div>
                                             </div>
@@ -568,7 +568,7 @@ if(!isset($_SESSION['Perfil']))
                                             <div class="col-sm-4">
                                                 <div class="form-group label-floating is-empty">
                                                     <label class="control-label"></label>
-                                                    <input type="text" name="telefono" id="Telefono"  class="form-control" value required onkeypress="return SoloNumeros(event);">
+                                                    <input type="text" name="telefono" id="Telefono"  class="form-control" value>
                                                     <span class="help-block">Solo caracteres numericos</span>
                                                 </div>
                                             </div>
@@ -578,7 +578,7 @@ if(!isset($_SESSION['Perfil']))
                                             <div class="col-sm-6">
                                                 <div class="form-group label-floating is-empty">
                                                     <label class="control-label"></label>
-                                                    <input type="text" name="codigoPostal" id="CodigoPostal"  class="form-control" value required onkeypress="return SoloNumeros(event);">
+                                                    <input type="text" name="codigoPostal" id="CodigoPostal"               class="form-control" value>
                                                     <span class="help-block">Solo caracteres numericos</span>
                                                 </div>
                                             </div>

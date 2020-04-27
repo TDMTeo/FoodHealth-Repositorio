@@ -71,6 +71,12 @@ if(!isset($_SESSION['Perfil']))
 
      $idDomiciliiaro = $informacion["iddomiciliario"];
 
+     $query = "select pedido.idPedido, concat(nombre,' ',apellido) as 'Nombre', FechaEntrega, CodigoQR, pedido.DireccionPredeterminada, cliente.Direccion, estado.Estado as 'Estado', ruta.Tiempo_Aproximado from cliente, pedido, estado, ruta, domiciliario where Cliente.idCliente = Pedido.idCliente and Pedido.idEstado = Estado.idEstado and pedido.idRuta = ruta.idRuta and Ruta.idDomiciliario = Domiciliario.iddomiciliario and domiciliario.iddomiciliario = '$idDomiciliiaro'";
+    $validacionB = mysqli_query($conectar, $query);
+      while ($ValidarRuta = mysqli_fetch_array($validacionB)) {
+          $idRuta = $ValidarRuta['idPedido'];
+          $tiempo_aproximado = $ValidarRuta['Tiempo_Aproximado'];
+        }
 
     ?>  
     <body>
@@ -103,7 +109,7 @@ if(!isset($_SESSION['Perfil']))
                     </a>
                     <div class="collapse" id="collapseExample">
                         <ul class="nav">
-                            <li class="active">
+                            <li>
                                 <a href="./">Mi Perfil</a>
                             </li>
                             <li>
@@ -120,7 +126,7 @@ if(!isset($_SESSION['Perfil']))
                         <p>Inicio</p>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="./">
                         <i class="material-icons">fastfood</i>
                         <p>Pedidos</p>
@@ -227,22 +233,36 @@ if(!isset($_SESSION['Perfil']))
                     	 <small class="category">Pedidos de su Ruta</small>
                     </h4>
                     <div class="card-content">
-                        <div class="table-responsive">
-                            <table class="table">
-                              <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th>Nombre del Cliente</th>
-                                  <th>Fecha</th>
-                                  <th>Codigo QR</th>
-                                  <th>Direccion de entrega</th>
-                                  <th>Estado</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
+                    <?php 
+                        if (empty($idRuta)) {
+                            echo '
+                            <blockquote class="blockquote">
+                              <p class="mb-0">No se encuentran pedidos asignados de manera correcta</p>
+                              <footer class="blockquote-footer"><cite title="Source Title">FoodHealth</cite></footer>
+                            </blockquote>
+                            ';
+                        }
+                        else{
+                            echo '
+                            <div class="table-responsive">
+                                <table class="table">
+                                  <thead>
+                                    <tr>
+                                      <th>#</th>
+                                      <th>Nombre del Cliente</th>
+                                      <th>Fecha</th>
+                                      <th>Codigo QR</th>
+                                      <th>Direccion de entrega</th>
+                                      <th>Estado</th>
+                                      <th></th>
+                                    </tr>
+                                  </thead>
+                            ';
+                        }
+                     ?>
+
                               <tbody>
                                 <?php
-                                $query = "select pedido.idPedido, concat(nombre,' ',apellido) as 'Nombre', FechaEntrega, CodigoQR, pedido.DireccionPredeterminada, cliente.Direccion, estado.Estado as 'Estado' from cliente, pedido, estado, ruta, domiciliario where Cliente.idCliente = Pedido.idCliente and Pedido.idEstado = Estado.idEstado and pedido.idRuta = ruta.idRuta and Ruta.idDomiciliario = Domiciliario.iddomiciliario and domiciliario.iddomiciliario = '$idDomiciliiaro'";
                                 $tabla = mysqli_query($conectar, $query);
 
                                 while ($fila = mysqli_fetch_array($tabla)) {?>
@@ -279,7 +299,7 @@ if(!isset($_SESSION['Perfil']))
 
 
                  <!-------------------------------------------------- Modal para editar estado ------------------------------------------------------>
-        <div class="modal fade" id="Modificar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="Modificar" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-small ">
                 <div class="modal-content">
                     <div class="modal-header text-center">
@@ -315,6 +335,7 @@ if(!isset($_SESSION['Perfil']))
             </div>
         </div>
       <!-----------------------------------------------------Modal para editar estado ------------------------------------------------------->
+
 
         <footer class="footer">
             <div class="container-fluid">
@@ -370,8 +391,9 @@ if(!isset($_SESSION['Perfil']))
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="../assets/js/demo.js"></script>
 <script type="text/javascript">
-    $().ready(function() {
+    $(document).ready(function() {
         demo.initMaterialWizard();
+
     });
 </script>
         <script>
