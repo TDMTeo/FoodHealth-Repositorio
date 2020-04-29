@@ -1,6 +1,28 @@
 <?php
 session_start();
-if(!isset($_SESSION['Perfil'])) 
+include("../php/Conexion.php");
+     $idUsuario = $_SESSION['idUsuario'];
+
+     $consulta = mysqli_query($conectar,'Select * From Usuarios,domiciliario where usuarios.idUsuario = domiciliario.idUsuario and  usuarios.idUsuario = '. $idUsuario);
+
+     $informacion = mysqli_fetch_array($consulta);
+
+     $nombre = $informacion["nombres"];
+
+     $apellidos = $informacion["apellidos"];
+
+     $nombreCompleto = $nombre. ' '. $apellidos;
+
+     $foto = $informacion["foto"];
+    
+    $idDomiciliario = $informacion["iddomiciliario"];
+
+$Validar = "select pedido.indexZ, pedido.idPedido  from cliente, pedido, estado, ruta, domiciliario where Cliente.idCliente = Pedido.idCliente and Pedido.idEstado = Estado.idEstado and pedido.idRuta = ruta.idRuta and Ruta.idDomiciliario = Domiciliario.iddomiciliario and domiciliario.iddomiciliario = '$idDomiciliario' and pedido.Tiempo_Estimado is not null ";
+$validarRuta = mysqli_query($conectar, $Validar);
+  while ($ValidarRuta = mysqli_fetch_array($validarRuta)) {
+      $idRuta = $ValidarRuta['idPedido'];
+    }
+if(!isset($_SESSION['Perfil']) || empty($idRuta)) 
 {
   header('Location: ../');  
 }
@@ -42,67 +64,18 @@ if(!isset($_SESSION['Perfil']))
         <meta property="og:description" content="Material Dashboard PRO is a Premium Material Bootstrap Admin with a fresh, new design inspired by Google's Material Design." />
         <meta property="og:site_name" content="Creative Tim" />
         <!-- Bootstrap core CSS     -->
-        <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
         <!--  Material Dashboard CSS    -->
-        <link href="assets/css/material-dashboard.css" rel="stylesheet" />
+        <link href="../assets/css/material-dashboard.css" rel="stylesheet" />
         <!--  CSS for Demo Purpose, don't include it in your project     -->
-        <link href="assets/css/demo.css" rel="stylesheet" />
+        <link href="../assets/css/demo.css" rel="stylesheet" />
         <!--     Fonts and icons     -->
-        <link href="assets/css/font-awesome.css" rel="stylesheet" />
-        <link href="assets/css/google-roboto-300-700.css" rel="stylesheet" />
-        <script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
-        <script src="assets/js/jquery-ui.min.js" type="text/javascript"></script>
-
-        <script>
-            $(document).ready(function(){
-            //Obtener Datos
-                function obtenerDatos(){
-                    $.ajax({
-                        url: "mostrarDatos.php",
-                        method: "POST",
-                        success:function(data){
-                            $('#resultados').html(data)
-                        }
-                    })
-                }
-
-                obtenerDatos();
-                //Obtener Datos
-                
-                function actualizar_datos(id, texto, columna){
-                    $.ajax({
-                        url: "php/orden.php",
-                        method: "POST",
-                        data: {id: id, texto: texto, columna: columna},
-                        success:function(data){
-                            obtenerDatos();
-                            alert(data);
-                        }
-                    })
-                }
-
-                //Actualizar Datos
-                $(document).on("blur", "#ordenPedido", function(){
-                    var id = $(this).data("idorden");
-                    var orden = $(this).text();
-
-                    actualizar_datos(id, orden, "indexZ");
-                })
-
-                $(document).on("blur", "#tiempoEstimado", function(){
-                    var id = $(this).data("idtiempo");
-                    var hora = $(this).text();
-
-                    actualizar_datos(id, hora, "Tiempo_Estimado");
-                })
-                //Actualizar Datos    
-            })
-
-        </script>
+        <link href="../assets/css/font-awesome.css" rel="stylesheet" />
+        <link href="../assets/css/google-roboto-300-700.css" rel="stylesheet" />
 
 </head>
 
-    <?php include("php/Conexion.php");
+    <?php include("../php/Conexion.php");
 
      $idUsuario = $_SESSION['idUsuario'];
 
@@ -120,11 +93,6 @@ if(!isset($_SESSION['Perfil']))
     
     $idDomiciliario = $informacion["iddomiciliario"];
 
-    $Validar = "select pedido.indexZ, pedido.idPedido  from cliente, pedido, estado, ruta, domiciliario where Cliente.idCliente = Pedido.idCliente and Pedido.idEstado = Estado.idEstado and pedido.idRuta = ruta.idRuta and Ruta.idDomiciliario = Domiciliario.iddomiciliario and domiciliario.iddomiciliario = '$idDomiciliario' and pedido.Tiempo_Estimado is not null ";
-    $validarRuta = mysqli_query($conectar, $Validar);
-      while ($ValidarRuta = mysqli_fetch_array($validarRuta)) {
-          $idRuta = $ValidarRuta['idPedido'];
-        }
     ?>  
     <body>
         <div class="wrapper">
@@ -270,98 +238,11 @@ if(!isset($_SESSION['Perfil']))
         </nav>
         <div class="content">
           <div class="container-fluid">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header card-header-icon" data-background-color="green">
-                        <i class="material-icons">fastfood</i>
-                    </div>
-                    <br>    
-                    <h4 class="card-title">Pedidos -
-                         <small class="category">Dale orden a tus pedidos</small>
-                    </h4>
-                    <div class="card-content">
-                        <div class="table-responsive" id="resultados">
-
-
-
-
-
-
-                        </div>
-                    </div>
-                </div>
-             </div>
+            Soy el mapa :D
            </div>
          </div>
 
-        <!-------------------------------------------------- Modal para dar Orden ----------------------------------------------->
-        <div class="modal fade" id="Orden" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Dale orden a tus pedidos</h4>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table">
-                          <thead>
-                            <tr>
-                              <th></th>
-                              <th>Orden</th>
-                              <th>Direccion de entrega</th>
-                              <th>Tiempo Estimado</th>
-                            </tr>
-                          </thead>
-                      <tbody>
-                        <p id="respuesta">
-                            
-                        </p>
-                        <?php
-                        $tabla = mysqli_query($conectar, $query);
-                        $numero = 0;
-                        while ($fila = mysqli_fetch_array($tabla)) {
-                            $numero = $numero + 1;
-                            ?> 
-                          <tr>
 
-                            <td><input type="hidden" name="idPedido" id="idPedido" value="<?php echo $fila['idPedido'] ?>" >
-                            </td>
-                            <td width="10px" height="10px">
-                                <div class="form-group label-floating is-empty">
-                                    <label class="control-label"></label>
-                                    <input type="text" class="form-control"  name="indexZ" id="indexZ" value="<?php echo $numero ?>" placeholder="<?php echo $numero ?>">
-                                </div>
-                            </td>
-                            <td><?php echo $fila['DireccionPredeterminada']?></td>
-                            <td >
-                                <div class="form-group">
-                                    <label class="label-control">Tiempo Aproximado</label>
-                                    <input type="text" class="form-control timepicker" name="tiempoEstimado" id="tiempoEstimado" value="00:00"  />
-                                </div> 
-                            </td>
-                            <td>
-                                <button type="submit" class="btn btn-info btn-simple" name="Ordenar" id="Ordenar" rel="tooltip" title="Editar"  >
-                                   <i class="material-icons">edit</i>
-                                </button>
-                            </td>
-                            
-                          </tr>
-                        <?php 
-                        }?>
-                      </tbody>
-                    </table>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="php/cerrarsesion.php" class="btn btn-primary btn-fab btn-fab-mini btn-round">
-                            <i class="material-icons" href="php/cerrarsesion.php">favorite</i>
-                        </a>
-                        <button type="submit" class="btn btn-simple">Aceptar</button>
-                    </div>
-                   <div id="sliderRegular" style="display: none"></div>
-                   <div id="sliderDouble" style="display: none"></div>
-                </div>
-            </div>
-        </div>
-      <!-----------------------------------------------------Modal para dar Orden --------------------------------------------------->
         <footer class="footer">
             <div class="container-fluid">
                 <nav class="pull-left">
@@ -374,46 +255,47 @@ if(!isset($_SESSION['Perfil']))
 </div>
 
 <!--   Core JS Files   -->
-
-<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="assets/js/material.min.js" type="text/javascript"></script>
-<script src="assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
+<script src="../assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
+<script src="../assets/js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="../assets/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../assets/js/material.min.js" type="text/javascript"></script>
+<script src="../assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
 <!-- Forms Validations Plugin -->
-<script src="assets/js/jquery.validate.min.js"></script>
+<script src="../assets/js/jquery.validate.min.js"></script>
 <!--  Plugin for Date Time Picker and Full Calendar Plugin-->
-<script src="assets/js/moment.min.js"></script>
-<!--  Charts Plugin -->
-<script src="assets/js/chartist.min.js"></script>
+<script src="../assets/js/moment.min.js"></script>
+<!--  Charts ../Plugin -->
+<script src="../assets/js/chartist.min.js"></script>
 <!--  Plugin for the Wizard -->
-<script src="assets/js/jquery.bootstrap-wizard.js"></script>
+<script src="../assets/js/jquery.bootstrap-wizard.js"></script>
 <!--  Notifications Plugin    -->
-<script src="assets/js/bootstrap-notify.js"></script>
+<script src="../assets/js/bootstrap-notify.js"></script>
 <!--   Sharrre Library    -->
-<script src="assets/js/jquery.sharrre.js"></script>
+<script src="../assets/js/jquery.sharrre.js"></script>
 <!-- DateTimePicker Plugin -->
-<script src="assets/js/bootstrap-datetimepicker.js"></script>
+<script src="../assets/js/bootstrap-datetimepicker.js"></script>
 <!-- Vector Map plugin -->
-<script src="assets/js/jquery-jvectormap.js"></script>
+<script src="../assets/js/jquery-jvectormap.js"></script>
 <!-- Sliders Plugin -->
-<script src="assets/js/nouislider.min.js"></script>
+<script src="../assets/js/nouislider.min.js"></script>
 <!--  Google Maps Plugin    -->
 <!--<script src="https://maps.googleapis.com/maps/api/js"></script>-->
 <!-- Select Plugin -->
-<script src="assets/js/jquery.select-bootstrap.js"></script>
+<script src="../assets/js/jquery.select-bootstrap.js"></script>
 <!--  DataTables.net Plugin    -->
-<script src="assets/js/jquery.datatables.js"></script>
+<script src="../assets/js/jquery.datatables.js"></script>
 <!-- Sweet Alert 2 plugin -->
-<script src="assets/js/sweetalert2.js"></script>
+<script src="../assets/js/sweetalert2.js"></script>
 <!--    Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-<script src="assets/js/jasny-bootstrap.min.js"></script>
+<script src="../assets/js/jasny-bootstrap.min.js"></script>
 <!--  Full Calendar Plugin    -->
-<script src="assets/js/fullcalendar.min.js"></script>
+<script src="../assets/js/fullcalendar.min.js"></script>
 <!-- TagsInput Plugin -->
-<script src="assets/js/jquery.tagsinput.js"></script>
+<script src="../assets/js/jquery.tagsinput.js"></script>
 <!-- Material Dashboard javascript methods -->
-<script src="assets/js/material-dashboard.js"></script>
+<script src="../assets/js/material-dashboard.js"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-<script src="assets/js/demo.js"></script>
+<script src="../assets/js/demo.js"></script>
 <script type="text/javascript">
     $().ready(function() {
         md.initSliders()
@@ -422,16 +304,5 @@ if(!isset($_SESSION['Perfil']))
 
 </script>
 
-<?php 
-    if (empty($idRuta)) {
-
-    }
-    else{
-             echo '<body onload="document.formulario.submit()">
-           <form action="Mapa/" method="post" name="formulario">
-           </body>
-           </form> '; 
-    }
- ?>
 </body>
 </html>
