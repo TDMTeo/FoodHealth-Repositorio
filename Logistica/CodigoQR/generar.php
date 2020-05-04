@@ -57,7 +57,7 @@ if (isset($_POST['Modificar'])) {
       echo $query;
     }
   
-  
+
 }
 
 
